@@ -1,0 +1,44 @@
+<idea-plugin>
+    <id>net.shaidullin</id>
+    <name>Code maker</name>
+    <version>1.0-SNAPSHOT</version>
+    <vendor email="timur@shaidullin.net" url="shaidullin.net">Timur Shaidullin</vendor>
+    <resource-bundle>GeneratorBundle</resource-bundle>
+
+    <depends>com.intellij.modules.java</depends>
+
+
+    <project-components>
+        <component>
+            <implementation-class>net.shaidullin.code_maker.CodeMakerPlugin</implementation-class>
+            <interface-class>net.shaidullin.code_maker.CodeMakerPlugin</interface-class>
+        </component>
+    </project-components>
+
+
+    <extensions defaultExtensionNs="com.intellij">
+        <projectService serviceInterface="net.shaidullin.code_maker.config.ApplicationState"
+                        serviceImplementation="net.shaidullin.code_maker.config.ApplicationState"/>
+
+        <projectConfigurable instance="net.shaidullin.code_maker.CodeMakerConfigurable"/>
+
+        <toolWindow id="Code maker"
+                    anchor="bottom"
+                    canCloseContents="false"
+                    factoryClass="net.shaidullin.code_maker.ui.toolwindow.GeneratorToolWindowFactory"
+                    icon="plugin-icon.png"/>
+    </extensions>
+
+    <actions>
+        <group id="GeneratorActions" text="Actions" description="Generate code and other operations" popup="true">
+            <action id="GenerationUpdate"
+                    class="net.shaidullin.code_maker.actions.Update"
+                    text="Обновить"
+                    description="Обновить"
+                    icon="/actions/refresh.png"/>
+
+            <separator/>
+        </group>
+    </actions>
+
+</idea-plugin>
