@@ -1,7 +1,6 @@
 package net.shaidullin.code_maker.core.node;
 
 import net.shaidullin.code_maker.core.metadata.FieldMetadata;
-import net.shaidullin.code_maker.integration.IntegrationObject;
 
 public class FieldNode implements Node<LeafNode, FieldMetadata> {
     private String systemName;
@@ -44,15 +43,5 @@ public class FieldNode implements Node<LeafNode, FieldMetadata> {
     @Override
     public void setMetadata(FieldMetadata metadata) {
         this.metadata = metadata;
-    }
-
-    @Override
-    public IntegrationObject getIntegrationObject() {
-        throw new UnsupportedOperationException("LeafNode.getIntegrationObject() is not supported");
-    }
-
-    @Override
-    public void setIntegrationObject(IntegrationObject integrationObject) {
-        throw new UnsupportedOperationException("LeafNode.getIntegrationObject() is not supported");
     }
 }

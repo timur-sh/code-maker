@@ -8,7 +8,7 @@ import java.util.Objects;
 /**
  * Мета данные элементов
  */
-public class ElementNode implements Node<ModuleNode, ElementMetadata> {
+public class ElementNode implements IoNode<ModuleNode, ElementMetadata> {
     private String systemName;
     private ModuleNode parent;
     private ElementMetadata metadata;
@@ -63,7 +63,6 @@ public class ElementNode implements Node<ModuleNode, ElementMetadata> {
     public void setIntegrationObject(IntegrationObject integrationObject) {
         this.integrationObject = integrationObject;
     }
-
 
     @Override
     public boolean equals(Object o) {

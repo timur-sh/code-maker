@@ -2,7 +2,13 @@ package net.shaidullin.code_maker.core.node;
 
 import net.shaidullin.code_maker.core.metadata.LeafMetadata;
 
-public interface LeafNode<N extends PackageNode, M extends LeafMetadata> extends Node<N, M> {
+/**
+ * Leaf is the node displayed within tree of {@link net.shaidullin.code_maker.integration.IntegrationObject}
+ *
+ * @param <N>
+ * @param <M>
+ */
+public interface LeafNode<N extends PackageNode, M extends LeafMetadata> extends IoNode<N, M> {
 
     @Override
     N getParent();
@@ -10,4 +16,9 @@ public interface LeafNode<N extends PackageNode, M extends LeafMetadata> extends
     @Override
     void setParent(N parent);
 
+    @Override
+    M getMetadata();
+
+    @Override
+    void setMetadata(M metadata);
 }

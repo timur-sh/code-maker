@@ -14,9 +14,6 @@ public class ModuleNode implements Node<ModuleNode, ModuleMetadata> {
     private String path;
 
     @Transient
-    private IntegrationObject integrationObject;
-
-    @Transient
     private ModuleMetadata metadata;
 
     public ModuleNode() {
@@ -45,16 +42,6 @@ public class ModuleNode implements Node<ModuleNode, ModuleMetadata> {
     @Override
     public ModuleMetadata getMetadata() {
         return this.metadata;
-    }
-
-    @Override
-    public IntegrationObject getIntegrationObject() {
-        return integrationObject;
-    }
-
-    @Override
-    public void setIntegrationObject(IntegrationObject integrationObject) {
-        this.integrationObject = integrationObject;
     }
 
     @Override

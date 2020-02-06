@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.stream.Collectors;
 
 public class ConfigurationManager {
     private static final ConfigurationManager INSTANCE = new ConfigurationManager();
@@ -59,7 +58,6 @@ public class ConfigurationManager {
         } finally {
             lock.unlock();
         }
-
     }
 
     private void assembleConfiguration(ApplicationState state) {
@@ -89,19 +87,20 @@ public class ConfigurationManager {
     }
 
     private void loadElementsByModule(ModuleNode module, IntegrationObject integrationObject) {
-        ELEMENTS.remove(module);
-        ELEMENTS.put(module, new ArrayList<>());
-        List<ElementNode> elementNodes = ELEMENTS.get(module);
-
-        List<ElementNode> elements = FileHelper.getFolders(module.getPath()).stream()
-            .map(folderName -> new ElementNode(folderName, module, integrationObject))
-            .collect(Collectors.toList());
-
-        elementNodes.addAll(elements);
-
-        for (ElementNode elementNode : elements) {
-            loadPackagesByElement(elementNode, integrationObject);
+        if (ELEMENTS.containsKey(module)) {
+            ELEMENTS.get(module).removeIf(elementNode ->
+                elementNode.getSystemName().equals(integrationObject.getFolder()));
+        } else {
+            ELEMENTS.put(module, new ArrayList<>());
         }
+
+        if (!FileHelper.exists(module.getPath(), integrationObject.getFolder())) {
+            return;
+        }
+
+        ElementNode elementNode = new ElementNode(integrationObject.getFolder(), module, integrationObject);
+
+        ELEMENTS.get(module).add(elementNode);
     }
 
     private void loadPackagesByElement(ElementNode elementNode, IntegrationObject integrationObject) {
@@ -124,12 +123,13 @@ public class ConfigurationManager {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void loadClassesByPackage(PackageNode packageNode, IntegrationObject integrationObject) {
         LEAVES.remove(packageNode);
         LEAVES.put(packageNode, new ArrayList<>());
-        List<LeafNode> leafNodes = LEAVES.get(packageNode);
 
-        leafNodes.addAll(integrationObject.getLeaves(packageNode));
+        LEAVES.get(packageNode)
+            .addAll(integrationObject.getLeaves(packageNode));
     }
 
 }

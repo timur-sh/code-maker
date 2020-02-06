@@ -5,18 +5,18 @@ import net.shaidullin.code_maker.dto.metadata.DtoMetadata;
 import java.util.UUID;
 
 public class FieldTypeUtils {
-    public static FieldType buildFieldType(UUID uuid, String name, boolean primitive, boolean importPackage, String clz) {
-        return buildFieldType(uuid, name, primitive, importPackage, clz, null);
+    public static FieldType buildFieldType(UUID uuid, String name, boolean primitive, boolean requiredImport, String clz) {
+        return buildFieldType(uuid, name, primitive, requiredImport, clz, null);
     }
 
-    public static FieldType buildFieldType(UUID uuid, String name, boolean primitive, boolean importPackage, String clz, DtoMetadata domainMetadata) {
+    public static FieldType buildFieldType(UUID uuid, String name, boolean primitive, boolean requiredImport, String clz, DtoMetadata metadata) {
         DefaultFieldTypeImpl type = new DefaultFieldTypeImpl();
         type.setName(name);
         type.setUuid(uuid);
         type.setPrimitive(primitive);
-        type.setTypeClassName(clz);
-        type.setImportPackage(importPackage);
-        type.setDomainMetadata(domainMetadata);
+        type.setClassName(clz);
+        type.setRequiredImport(requiredImport);
+        type.setMetadata(metadata);
 
         return type;
     }

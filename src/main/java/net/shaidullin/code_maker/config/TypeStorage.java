@@ -1,7 +1,7 @@
 package net.shaidullin.code_maker.config;
 
 
-import net.shaidullin.code_maker.core.node.ModuleNode;
+import net.shaidullin.code_maker.core.node.ElementNode;
 import net.shaidullin.code_maker.core.type.FieldType;
 import net.shaidullin.code_maker.core.type.FieldTypeUtils;
 
@@ -19,22 +19,25 @@ public class TypeStorage {
 
     public static String PRIMITIVES = "Base types";
     public static String MODEL = "Model-class types";
-    public static final FieldType UNDEFINED = FieldTypeUtils.buildFieldType(UUID.fromString("778f6103-7223-4cd8-8757-000000000000"), "undefined", false, false, Undefined.class.getName());
+    public static final FieldType UNDEFINED = FieldTypeUtils.buildFieldType(UUID.fromString("778f6103-7223-4cd8-8757-000000000000"),
+        "undefined",
+        false,
+        false,
+        Undefined.class.getName());
 
     private final Map<UUID, FieldType> primitives = new HashMap<>();
-    private final Map<ModuleNode, Map<UUID, FieldType>> customTypes = new HashMap<>();
 
-    public TypeStorage() {
+    private final Map<ElementNode, Map<UUID, FieldType>> customTypes = new HashMap<>();
+
+
+    TypeStorage() {
     }
 
-    public void initialize() {
-        primitives.clear();
-        customTypes.clear();
+    void initializePrimitiveTypes() {
+        if (primitives.size() > 0) {
+            return;
+        }
 
-        initializePrimitiveTypes();
-    }
-
-    private void initializePrimitiveTypes() {
         UUID longUID = UUID.fromString("778f6103-7223-4cd8-8757-440b2c3291f1");
         primitives.put(longUID, FieldTypeUtils.buildFieldType(longUID, "Long", true, false, Long.class.getName()));
 
@@ -69,23 +72,16 @@ public class TypeStorage {
         primitives.put(objectUID, FieldTypeUtils.buildFieldType(objectUID, "Object", false, false, Object.class.getName()));
     }
 
-    /**
-     * Check whether the storage contains a type UUID already
-     *
-     * @param newCustomTypes new types
-     */
-    protected void checkCustomTypeOnUnoqiue(Map<UUID, FieldType> newCustomTypes) {
-        for (Map<UUID, FieldType> value : customTypes.values()) {
-            for (UUID uuid : value.keySet()) {
-                if (newCustomTypes.containsKey(uuid)) {
-                    throw new IllegalArgumentException(String.format(
-                        "Storage contains type with uuid '%s'. Storage type name='%s', New type name ='%s'",
-                        uuid,
-                        value.get(uuid).getName(),
-                        newCustomTypes.get(uuid).getName()
-                    ));
-                }
+    void registerCustomTypes(Map<ElementNode, Map<UUID, FieldType>> types) {
+        for (ElementNode elementNode : types.keySet()) {
+            if (!customTypes.containsKey(elementNode)) {
+                customTypes.put(elementNode, new HashMap<>());
+            } else {
+                customTypes.get(elementNode).clear();
             }
+
+            Map<UUID, FieldType> typeMap = customTypes.get(elementNode);
+            typeMap.putAll(types.get(elementNode));
         }
     }
 
@@ -111,8 +107,8 @@ public class TypeStorage {
         return primitives;
     }
 
-    public Map<UUID, FieldType> getClassesByModule(ModuleNode cmModule) {
-        return customTypes.get(cmModule);
+    public Map<UUID, FieldType> getTypesByElementNode(ElementNode elementNode) {
+        return customTypes.get(elementNode);
     }
 
     protected Map<UUID, FieldType> getClassesByModule() {

@@ -1,11 +1,12 @@
 package net.shaidullin.code_maker.core.type;
 
+import net.shaidullin.code_maker.core.metadata.LeafMetadata;
 import net.shaidullin.code_maker.dto.metadata.DtoMetadata;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public interface FieldType {
+public interface FieldType<T extends LeafMetadata> {
 
     /**
      * @return UUID of type
@@ -18,6 +19,8 @@ public interface FieldType {
     void setUuid(UUID uuid);
 
     /**
+     * Name is displayed in menu tree
+     *
      * @return type name
      */
     String getName();
@@ -28,22 +31,23 @@ public interface FieldType {
     void setName(String name);
 
     /**
-     * @return t
+     * Class name is used in generation
+     * @return
      */
-    String getTypeClassName();
+    String getClassName();
 
-    void setTypeClassName(String typeClassName);
+    void setClassName(String typeClassName);
 
     boolean isPrimitive();
 
     void setPrimitive(boolean primitive);
 
-    boolean isImportPackage();
+    boolean isRequiredImport();
 
-    void setImportPackage(boolean importPackage);
+    void setRequiredImport(boolean requiredImport);
 
     @Nullable
-    DtoMetadata getDomainMetadata();
+    T getMetadata();
 
-    void setDomainMetadata(DtoMetadata domainMetadata);
+    void setMetadata(T metadata);
 }

@@ -1,27 +1,23 @@
-package net.shaidullin.code_maker.core.node;
+package net.shaidullin.code_maker.dto.node;
 
-import com.intellij.util.xmlb.annotations.Transient;
-import net.shaidullin.code_maker.core.metadata.PackageMetadata;
+import net.shaidullin.code_maker.core.node.LeafNode;
+import net.shaidullin.code_maker.core.node.PackageNode;
+import net.shaidullin.code_maker.dto.metadata.DtoMetadata;
 import net.shaidullin.code_maker.integration.IntegrationObject;
-import org.jetbrains.annotations.NotNull;
 
 /**
- * Package node
+ * DTO node is contained in package
  */
-public class PackageNode implements IoNode<ElementNode, PackageMetadata>, Comparable<PackageNode> {
+public class DtoNode implements LeafNode<PackageNode, DtoMetadata> {
     private String systemName;
-    private ElementNode parent;
-
-    @Transient
+    private PackageNode parent;
     private IntegrationObject integrationObject;
+    private DtoMetadata metadata;
 
-    @Transient
-    private PackageMetadata metadata;
-
-    public PackageNode() {
+    public DtoNode() {
     }
 
-    public PackageNode(String systemName, ElementNode parent, IntegrationObject integrationObject) {
+    public DtoNode(String systemName, PackageNode parent, IntegrationObject integrationObject) {
         this.systemName = systemName;
         this.parent = parent;
         this.integrationObject = integrationObject;
@@ -38,37 +34,33 @@ public class PackageNode implements IoNode<ElementNode, PackageMetadata>, Compar
     }
 
     @Override
-    public ElementNode getParent() {
+    public PackageNode getParent() {
         return parent;
     }
 
     @Override
-    public void setParent(ElementNode parent) {
+    public void setParent(PackageNode parent) {
         this.parent = parent;
     }
 
     @Override
-    public int compareTo(@NotNull PackageNode o) {
-        return this.systemName.compareTo(o.systemName);
-    }
-
-    @Override
-    public PackageMetadata getMetadata() {
+    public DtoMetadata getMetadata() {
         return metadata;
     }
 
     @Override
-    public void setMetadata(PackageMetadata metadata) {
+    public void setMetadata(DtoMetadata metadata) {
         this.metadata = metadata;
     }
 
     @Override
     public IntegrationObject getIntegrationObject() {
-        return this.integrationObject;
+        return integrationObject;
     }
 
     @Override
     public void setIntegrationObject(IntegrationObject integrationObject) {
         this.integrationObject = integrationObject;
     }
+
 }

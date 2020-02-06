@@ -20,6 +20,11 @@ import java.util.List;
 public class FileHelper {
     public static final String SEPARATOR = File.separator;
 
+    public static boolean exists(String path, String name) {
+        File file = new File(path, name);
+        return file.exists();
+    }
+
     /**
      * Read a content of the path and return names of child folders
      *
@@ -27,12 +32,12 @@ public class FileHelper {
      * @return an empty list if no one found
      */
     public static List<String> getFolders(String path) {
-        File file = new File(path);
-        if (!file.exists() || !file.isDirectory()) {
+        File directory = new File(path);
+        if (!directory.exists() || !directory.isDirectory()) {
             return new ArrayList<>();
-
         }
-        String[] directories = file.list((current, name) -> new File(current, name).isDirectory());
+
+        String[] directories = directory.list((current, name) -> new File(current, name).isDirectory());
 
         if (directories == null) {
             return new ArrayList<>();
@@ -50,6 +55,9 @@ public class FileHelper {
      */
     public static List<String> getFiles(String path) {
         File directory = new File(path);
+        if (!directory.exists() || !directory.isDirectory()) {
+            return new ArrayList<>();
+        }
 
         String[] files = directory.list((current, name) -> new File(current, name).isFile());
 

@@ -1,7 +1,6 @@
 package net.shaidullin.code_maker.core.node;
 
 import net.shaidullin.code_maker.core.metadata.Metadata;
-import net.shaidullin.code_maker.integration.IntegrationObject;
 
 /**
  * Represent node in the menu tree
@@ -29,11 +28,4 @@ public interface Node<T extends Node, M extends Metadata> {
     M getMetadata();
 
     void setMetadata(M metadata);
-
-    /**
-     * @return integration object that the Node belongs to
-     */
-    IntegrationObject getIntegrationObject();
-
-    void setIntegrationObject(IntegrationObject integrationObject);
 }

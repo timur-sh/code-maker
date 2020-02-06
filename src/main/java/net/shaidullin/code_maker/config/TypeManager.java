@@ -1,54 +1,74 @@
 package net.shaidullin.code_maker.config;
 
+import net.shaidullin.code_maker.core.metadata.LeafMetadata;
+import net.shaidullin.code_maker.core.metadata.Metadata;
+import net.shaidullin.code_maker.core.node.ElementNode;
+import net.shaidullin.code_maker.core.node.LeafNode;
 import net.shaidullin.code_maker.core.node.ModuleNode;
+import net.shaidullin.code_maker.core.node.PackageNode;
 import net.shaidullin.code_maker.core.type.FieldType;
-import net.shaidullin.code_maker.integration.IntegrationObject;
-import net.shaidullin.code_maker.integration.IntegrationObjectRegistry;
+import net.shaidullin.code_maker.core.type.FieldTypeUtils;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * Manager provides accessing methods to type storage
+ * Manager provides access methods to type storage
  */
 public class TypeManager {
-    private final IntegrationObjectRegistry registry;
     private TypeStorage storage;
-    private static TypeManager INSTANCE;
+    private static TypeManager INSTANCE = new TypeManager();
+
     private static volatile boolean initialized = false;
 
-    private TypeManager(IntegrationObjectRegistry registry) {
-        this.registry = registry;
+    private TypeManager() {
     }
 
-    public static TypeManager getInstance(IntegrationObjectRegistry registry) {
-        if (INSTANCE == null) {
-            INSTANCE = new TypeManager(registry);
-        }
+    static TypeManager getInstance() {
         return INSTANCE;
     }
 
     /**
-     * Type manager
-     *
-     * @return
+     * @return true if storage is already initialized
      */
-    public boolean isInitialized() {
+    boolean isInitialized() {
         return initialized;
     }
 
-    public void initialize() {
+    void initialize(ApplicationState state) {
         storage = new TypeStorage();
         initialized = true;
-        reinitializeStorage();
+        reinitializeStorage(state);
     }
 
-    public void reinitializeStorage() {
-        storage.initialize();
+    @SuppressWarnings("unchecked")
+    void reinitializeStorage(ApplicationState state) {
+        storage.initializePrimitiveTypes();
 
-        for (IntegrationObject integrationObject : registry) {
-            integrationObject.registerTypes(storage);
+        Map<ElementNode, Map<UUID, FieldType>> customTypes = new HashMap<>();
+
+        Map<PackageNode, List<LeafNode>> leaves = state.getLeaves();
+        for (PackageNode packageNode : leaves.keySet()) {
+            ElementNode elementNode = packageNode.getParent();
+
+            if (!customTypes.containsKey(elementNode)) {
+                customTypes.put(elementNode, new HashMap<>());
+            }
+
+            Map<UUID, FieldType> fieldTypeMap = customTypes.get(elementNode);
+
+            for (LeafNode leafNode : leaves.get(packageNode)) {
+                LeafMetadata metadata = leafNode.getMetadata();
+
+                fieldTypeMap.put(
+                    metadata.getUuid(),
+                    leafNode.getIntegrationObject().buildFieldType(metadata)
+                );
+            }
         }
+        storage.registerCustomTypes(customTypes);
+
     }
 
     public FieldType getTypeByUID(UUID uuid) {
@@ -59,8 +79,8 @@ public class TypeManager {
         return storage.getPrimitives();
     }
 
-    public Map<UUID, FieldType> getCustomTypesByModule(ModuleNode cmModule) {
-        return storage.getClassesByModule(cmModule);
+    public Map<UUID, FieldType> getTypesByElementNode(ElementNode elementNode) {
+        return storage.getTypesByElementNode(elementNode);
     }
 
     public List<FieldType> getTypes() {
