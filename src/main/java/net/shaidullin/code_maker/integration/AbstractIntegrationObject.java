@@ -1,11 +1,12 @@
 package net.shaidullin.code_maker.integration;
 
 import net.shaidullin.code_maker.core.metadata.LeafMetadata;
+import net.shaidullin.code_maker.core.metadata.MetadataSettings;
 import net.shaidullin.code_maker.core.node.LeafNode;
 import net.shaidullin.code_maker.core.node.ModuleNode;
 import net.shaidullin.code_maker.core.node.PackageNode;
 import net.shaidullin.code_maker.core.type.FieldType;
-import net.shaidullin.code_maker.utils.FileHelper;
+import net.shaidullin.code_maker.utils.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -20,8 +21,8 @@ public abstract class AbstractIntegrationObject<N extends PackageNode, M extends
     public final void initialize(ModuleNode moduleNode) {
         // create folders of integration objects
         String path = StringUtils.join(
-            List.of(FileHelper.buildPathToMetadata(moduleNode), this.getFolder()),
-            FileHelper.SEPARATOR);
+            List.of(FileUtils.buildPathToMetadata(moduleNode), this.getFolder()),
+            FileUtils.SEPARATOR);
 
         File fsPath = new File(path);
         if (!fsPath.exists() && !fsPath.mkdirs()) {
@@ -36,8 +37,12 @@ public abstract class AbstractIntegrationObject<N extends PackageNode, M extends
     public List<LeafNode<N, M>> getLeaves(PackageNode packageNode) {
         List<LeafNode<N, M>> leafNodes = new ArrayList<>();
 
-        String pathToMetadata = FileHelper.buildPathToMetadata(packageNode);
-        for (String fileName : FileHelper.getFiles(pathToMetadata)) {
+        String pathToMetadata = FileUtils.buildPathToMetadata(packageNode);
+        for (String fileName : FileUtils.getFiles(pathToMetadata)) {
+            if (MetadataSettings.METADATA_FILE_NAME.equals(fileName)) {
+                continue;
+            }
+
             // [0] - filename, [1] - extension
             String[] parts = fileName.split("\\.");
 

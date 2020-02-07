@@ -21,7 +21,6 @@ import java.util.List;
 public class ModuleMetadata extends AbstractMetadata {
     private String dtoInterface;
     private List<String> usedModules = new ArrayList<>();
-    private List<String> fqnPackageParts = new ArrayList<>();
 
     public ModuleMetadata() {
     }
@@ -40,15 +39,5 @@ public class ModuleMetadata extends AbstractMetadata {
 
     public void setUsedModules(List<String> usedModules) {
         this.usedModules = usedModules;
-    }
-
-    @Override
-    public List<String> getFqnPackageParts() {
-        return this.fqnPackageParts;
-    }
-
-    @Override
-    public void setFqnPackageParts(List<String> fqnPackageParts) {
-        this.fqnPackageParts = fqnPackageParts;
     }
 }

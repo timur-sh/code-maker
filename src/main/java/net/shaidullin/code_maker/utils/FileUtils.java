@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class FileHelper {
+public class FileUtils {
     public static final String SEPARATOR = File.separator;
 
     public static boolean exists(String path, String name) {
@@ -84,7 +84,7 @@ public class FileHelper {
         return newDirectory.mkdir();
     }
 
-    private static List<String> buildPathPartsOfNode(Node node) {
+    private static List<String> assemblePathsToNode(Node node) {
         List<String> parts = new ArrayList<>();
         parts.add(node.getSystemName());
 
@@ -97,10 +97,15 @@ public class FileHelper {
     }
 
     public static String buildPathToMetadata(Node node) {
-        List<String> parts = buildPathPartsOfNode(node);
+        List<String> parts = assemblePathsToNode(node);
 
-        if (node instanceof ModuleNode) {
-            parts.add(((ModuleNode) node).getPath());
+        while (node != null) {
+            if (node instanceof ModuleNode) {
+                parts.add(((ModuleNode) node).getPath());
+                break;
+            }
+
+            node = node.getParent();
         }
 
         Collections.reverse(parts);
@@ -111,7 +116,7 @@ public class FileHelper {
     }
 
     public static String buildPathToGeneratedData(ApplicationState state, Node node) {
-        List<String> parts = buildPathPartsOfNode(node);
+        List<String> parts = assemblePathsToNode(node);
         if (state.getGeneratePath() != null) {
             parts.add(state.getGeneratePath());
         }
@@ -132,7 +137,7 @@ public class FileHelper {
      */
     public static void saveContent(ApplicationState state, PackageNode packageNode, String name, Object content) {
         String folder = buildPathToGeneratedData(state, packageNode);
-        String fileName = FileHelper.buildAbsoluteFileName(folder, name);
+        String fileName = FileUtils.buildAbsoluteFileName(folder, name);
 
         try {
             saveContent(fileName, JsonUtils.getObjectMapper().writeValueAsString(content));

@@ -1,11 +1,14 @@
 package net.shaidullin.code_maker.core.config;
 
+import net.shaidullin.code_maker.core.metadata.ElementMetadata;
+import net.shaidullin.code_maker.core.metadata.PackageMetadata;
 import net.shaidullin.code_maker.core.node.ElementNode;
 import net.shaidullin.code_maker.core.node.LeafNode;
 import net.shaidullin.code_maker.core.node.ModuleNode;
 import net.shaidullin.code_maker.core.node.PackageNode;
 import net.shaidullin.code_maker.integration.IntegrationObject;
-import net.shaidullin.code_maker.utils.FileHelper;
+import net.shaidullin.code_maker.utils.FileUtils;
+import net.shaidullin.code_maker.utils.NodeUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -94,11 +97,13 @@ public class ConfigurationManager {
             ELEMENTS.put(module, new ArrayList<>());
         }
 
-        if (!FileHelper.exists(module.getPath(), integrationObject.getFolder())) {
+        if (!FileUtils.exists(module.getPath(), integrationObject.getFolder())) {
             return;
         }
 
         ElementNode elementNode = new ElementNode(integrationObject.getFolder(), module, integrationObject);
+        elementNode.setMetadata(NodeUtils.readMetadata(elementNode, ElementMetadata.class));
+        loadPackagesByElement(elementNode, integrationObject);
 
         ELEMENTS.get(module).add(elementNode);
     }
@@ -108,13 +113,14 @@ public class ConfigurationManager {
         PACKAGES.put(elementNode, new ArrayList<>());
         List<PackageNode> packageNodes = PACKAGES.get(elementNode);
 
-        String pathToFolder = FileHelper.buildPathToMetadata(elementNode);
-        for (String directoryName : FileHelper.getFolders(pathToFolder)) {
+        String pathToFolder = FileUtils.buildPathToMetadata(elementNode);
+        for (String directoryName : FileUtils.getFolders(pathToFolder)) {
             PackageNode packageNode = new PackageNode(
                 directoryName,
                 elementNode,
                 integrationObject
             );
+            packageNode.setMetadata(NodeUtils.readMetadata(packageNode, PackageMetadata.class));
             packageNodes.add(packageNode);
         }
 
@@ -131,5 +137,4 @@ public class ConfigurationManager {
         LEAVES.get(packageNode)
             .addAll(integrationObject.getLeaves(packageNode));
     }
-
 }

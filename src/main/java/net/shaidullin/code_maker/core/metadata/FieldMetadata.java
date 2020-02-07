@@ -33,12 +33,12 @@ public class FieldMetadata extends AbstractMetadata {
 
     @Override
     public List<String> getFqnPackageParts() {
-        return null;
+        throw new UnsupportedOperationException("FieldMetadata.getFqnPackageParts()");
     }
 
     @Override
     public void setFqnPackageParts(List<String> fqnPackageParts) {
-
+        throw new UnsupportedOperationException("FieldMetadata.setFqnPackageParts()");
     }
 
     @Override
