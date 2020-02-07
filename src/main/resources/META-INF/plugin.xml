@@ -17,8 +17,8 @@
 
 
     <extensions defaultExtensionNs="com.intellij">
-        <projectService serviceInterface="net.shaidullin.code_maker.config.ApplicationState"
-                        serviceImplementation="net.shaidullin.code_maker.config.ApplicationState"/>
+        <projectService serviceInterface="net.shaidullin.code_maker.core.config.ApplicationState"
+                        serviceImplementation="net.shaidullin.code_maker.core.config.ApplicationState"/>
 
         <projectConfigurable instance="net.shaidullin.code_maker.CodeMakerConfigurable"/>
 

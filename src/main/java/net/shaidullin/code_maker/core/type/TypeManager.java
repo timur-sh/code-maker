@@ -1,16 +1,12 @@
-package net.shaidullin.code_maker.config;
+package net.shaidullin.code_maker.core.type;
 
+import net.shaidullin.code_maker.core.config.ApplicationState;
 import net.shaidullin.code_maker.core.metadata.LeafMetadata;
-import net.shaidullin.code_maker.core.metadata.Metadata;
 import net.shaidullin.code_maker.core.node.ElementNode;
 import net.shaidullin.code_maker.core.node.LeafNode;
-import net.shaidullin.code_maker.core.node.ModuleNode;
 import net.shaidullin.code_maker.core.node.PackageNode;
-import net.shaidullin.code_maker.core.type.FieldType;
-import net.shaidullin.code_maker.core.type.FieldTypeUtils;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -25,25 +21,25 @@ public class TypeManager {
     private TypeManager() {
     }
 
-    static TypeManager getInstance() {
+    public static TypeManager getInstance() {
         return INSTANCE;
     }
 
     /**
      * @return true if storage is already initialized
      */
-    boolean isInitialized() {
+    public boolean isInitialized() {
         return initialized;
     }
 
-    void initialize(ApplicationState state) {
+    public void initialize(ApplicationState state) {
         storage = new TypeStorage();
         initialized = true;
         reinitializeStorage(state);
     }
 
     @SuppressWarnings("unchecked")
-    void reinitializeStorage(ApplicationState state) {
+    public void reinitializeStorage(ApplicationState state) {
         storage.initializePrimitiveTypes();
 
         Map<ElementNode, Map<UUID, FieldType>> customTypes = new HashMap<>();

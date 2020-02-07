@@ -1,7 +1,7 @@
 package net.shaidullin.code_maker.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import net.shaidullin.code_maker.config.ApplicationState;
+import net.shaidullin.code_maker.core.config.ApplicationState;
 import net.shaidullin.code_maker.core.node.ModuleNode;
 import net.shaidullin.code_maker.core.node.Node;
 import net.shaidullin.code_maker.core.node.PackageNode;

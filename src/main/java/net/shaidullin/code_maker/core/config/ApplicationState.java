@@ -1,4 +1,4 @@
-package net.shaidullin.code_maker.config;
+package net.shaidullin.code_maker.core.config;
 
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
@@ -9,10 +9,10 @@ import net.shaidullin.code_maker.core.node.LeafNode;
 import net.shaidullin.code_maker.core.node.ModuleNode;
 import net.shaidullin.code_maker.core.node.PackageNode;
 import net.shaidullin.code_maker.core.node.utils.LeafNodeUtils;
+import net.shaidullin.code_maker.core.type.TypeManager;
 import net.shaidullin.code_maker.dto.DtoIntegrationObject;
 import net.shaidullin.code_maker.integration.IntegrationObject;
 import net.shaidullin.code_maker.integration.IntegrationObjectRegistry;
-import org.apache.commons.lang3.SerializationUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

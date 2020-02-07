@@ -1,4 +1,4 @@
-package net.shaidullin.code_maker.config.utils;
+package net.shaidullin.code_maker.core.config.utils;
 
 import net.shaidullin.code_maker.core.node.ModuleNode;
 import org.apache.commons.collections.CollectionUtils;

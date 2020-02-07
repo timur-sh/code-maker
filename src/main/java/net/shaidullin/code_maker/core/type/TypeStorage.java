@@ -1,4 +1,4 @@
-package net.shaidullin.code_maker.config;
+package net.shaidullin.code_maker.core.type;
 
 
 import net.shaidullin.code_maker.core.node.ElementNode;
