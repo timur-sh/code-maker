@@ -1,7 +1,5 @@
 package net.shaidullin.code_maker.core.metadata;
 
-import com.intellij.util.xmlb.annotations.Transient;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -13,8 +11,6 @@ public abstract class AbstractMetadata implements Metadata {
     protected UUID uuid;
     protected String systemName;
     protected String description;
-
-    @Transient
     protected List<String> fqnPackageParts = new ArrayList<>();
 
     public AbstractMetadata() {

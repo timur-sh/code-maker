@@ -1,8 +1,8 @@
-package net.shaidullin.code_maker.dto.node;
+package net.shaidullin.code_maker.integration.impl.dto.node;
 
 import net.shaidullin.code_maker.core.node.LeafNode;
 import net.shaidullin.code_maker.core.node.PackageNode;
-import net.shaidullin.code_maker.dto.metadata.DtoMetadata;
+import net.shaidullin.code_maker.integration.impl.dto.metadata.DtoMetadata;
 import net.shaidullin.code_maker.integration.IntegrationObject;
 
 /**

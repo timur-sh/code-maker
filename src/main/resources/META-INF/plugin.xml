@@ -2,7 +2,7 @@
     <id>net.shaidullin</id>
     <name>Code maker</name>
     <version>1.0-SNAPSHOT</version>
-    <vendor email="timur@shaidullin.net" url="shaidullin.net">Timur Shaidullin</vendor>
+    <vendor email="timur@shaidullin.net" url="https://shaidullin.net">Timur Shaidullin</vendor>
     <resource-bundle>GeneratorBundle</resource-bundle>
 
     <depends>com.intellij.modules.java</depends>
@@ -22,19 +22,19 @@
 
         <projectConfigurable instance="net.shaidullin.code_maker.CodeMakerConfigurable"/>
 
-        <toolWindow id="Code maker"
+        <toolWindow id="Code-maker"
                     anchor="bottom"
                     canCloseContents="false"
-                    factoryClass="net.shaidullin.code_maker.ui.toolwindow.GeneratorToolWindowFactory"
+                    factoryClass="net.shaidullin.code_maker.ui.toolwindow.CodeMakerToolWindowFactory"
                     icon="plugin-icon.png"/>
     </extensions>
 
     <actions>
         <group id="GeneratorActions" text="Actions" description="Generate code and other operations" popup="true">
             <action id="GenerationUpdate"
-                    class="net.shaidullin.code_maker.actions.Update"
-                    text="Обновить"
-                    description="Обновить"
+                    class="net.shaidullin.code_maker.ui.actions.Update"
+                    text="Update"
+                    description="Update"
                     icon="/actions/refresh.png"/>
 
             <separator/>

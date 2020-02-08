@@ -86,11 +86,15 @@ public class FileUtils {
 
     private static List<String> assemblePathsToNode(Node node) {
         List<String> parts = new ArrayList<>();
-        parts.add(node.getSystemName());
+        if (!(node instanceof ModuleNode)) {
+            parts.add(node.getSystemName());
+        }
 
         while (node.getParent() != null) {
             node = node.getParent();
-            parts.add(node.getSystemName());
+            if (!(node instanceof ModuleNode)) {
+                parts.add(node.getSystemName());
+            }
         }
 
         return parts;
@@ -101,7 +105,7 @@ public class FileUtils {
 
         while (node != null) {
             if (node instanceof ModuleNode) {
-                parts.add(((ModuleNode) node).getPath());
+                parts.add(((ModuleNode) node).getRootMetadataPath());
                 break;
             }
 
@@ -174,5 +178,19 @@ public class FileUtils {
 
         File newFile = new File(directory, fileName);
         return newFile.getPath();
+    }
+
+    /**
+     * Split {@code file} by dot and return a filename without extension
+     *
+     * @param file
+     * @return
+     */
+    public static String getFileName(String file) {
+        String[] parts = file.split("\\.");
+
+        return parts.length > 0
+            ? parts[0]
+            : file;
     }
 }

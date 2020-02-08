@@ -19,20 +19,20 @@ public class IntegrationObjectRegistry implements Iterable<IntegrationObject> {
      * @throws IllegalArgumentException if the integration object is registered
      */
     public void register(IntegrationObject integrationObject) {
-        if (REGISTRY.containsKey(integrationObject.getName())) {
-            throw new IllegalArgumentException(String.format("Integration object with the UUID='%s' is already registered.", integrationObject.getName()));
+        if (REGISTRY.containsKey(integrationObject.getUID())) {
+            throw new IllegalArgumentException(String.format("Integration object with the UUID='%s' is already registered.", integrationObject.getUID()));
         }
 
-        REGISTRY.put(integrationObject.getName(), integrationObject);
+        REGISTRY.put(integrationObject.getUID(), integrationObject);
     }
 
     @Nullable
-    public IntegrationObject getByUID(String name) {
-        return REGISTRY.get(name);
+    public IntegrationObject getByUID(String uid) {
+        return REGISTRY.get(uid);
     }
 
-    public void deleteByUID(String name) {
-        REGISTRY.remove(name);
+    public void deleteByUID(String uid) {
+        REGISTRY.remove(uid);
     }
 
     public Collection<IntegrationObject> getAll() {

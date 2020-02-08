@@ -8,29 +8,19 @@ import java.util.List;
  * Contains metadata of module. Example of JSON config:
  * {
  * "systemName": "News",
- * "fqnPartsPackage": [
+ * "fqnPackageParts": [
  * "com",
  * "news"
  * ],
  * "usedModules": [
  * "Author"
- * ],
- * "defaultDtoInterface": "com.news.jpa.domain.DomainObject",
+ * ]
  * }
  */
 public class ModuleMetadata extends AbstractMetadata {
-    private String dtoInterface;
     private List<String> usedModules = new ArrayList<>();
 
     public ModuleMetadata() {
-    }
-
-    public String getDtoInterface() {
-        return dtoInterface;
-    }
-
-    public void setDtoInterface(String dtoInterface) {
-        this.dtoInterface = dtoInterface;
     }
 
     public List<String> getUsedModules() {

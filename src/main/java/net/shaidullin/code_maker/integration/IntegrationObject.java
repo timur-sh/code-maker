@@ -18,6 +18,13 @@ public interface IntegrationObject<N extends PackageNode, M extends LeafMetadata
      *
      * @return uid
      */
+    String getUID();
+
+    /**
+     * Name of integration object to display by UI
+     *
+     * @return uid
+     */
     String getName();
 
     /**

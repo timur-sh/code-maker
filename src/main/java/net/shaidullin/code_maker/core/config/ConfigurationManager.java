@@ -7,6 +7,7 @@ import net.shaidullin.code_maker.core.node.LeafNode;
 import net.shaidullin.code_maker.core.node.ModuleNode;
 import net.shaidullin.code_maker.core.node.PackageNode;
 import net.shaidullin.code_maker.integration.IntegrationObject;
+import net.shaidullin.code_maker.integration.IoUtils;
 import net.shaidullin.code_maker.utils.FileUtils;
 import net.shaidullin.code_maker.utils.NodeUtils;
 
@@ -97,11 +98,12 @@ public class ConfigurationManager {
             ELEMENTS.put(module, new ArrayList<>());
         }
 
-        if (!FileUtils.exists(module.getPath(), integrationObject.getFolder())) {
+        String pathToMetadata = FileUtils.buildPathToMetadata(module);
+        if (!FileUtils.exists(pathToMetadata, integrationObject.getFolder())) {
             return;
         }
 
-        ElementNode elementNode = new ElementNode(integrationObject.getFolder(), module, integrationObject);
+        ElementNode elementNode = IoUtils.assembleElementNode(integrationObject, module);
         elementNode.setMetadata(NodeUtils.readMetadata(elementNode, ElementMetadata.class));
         loadPackagesByElement(elementNode, integrationObject);
 

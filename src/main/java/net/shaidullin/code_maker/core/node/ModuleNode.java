@@ -11,7 +11,7 @@ import java.util.Objects;
  */
 public class ModuleNode implements Node<ModuleNode, ModuleMetadata> {
     private String systemName;
-    private String path;
+    private String rootMetadataPath;
 
     @Transient
     private ModuleMetadata metadata;
@@ -49,12 +49,12 @@ public class ModuleNode implements Node<ModuleNode, ModuleMetadata> {
         this.metadata = metadata;
     }
 
-    public String getPath() {
-        return path;
+    public String getRootMetadataPath() {
+        return rootMetadataPath;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setRootMetadataPath(String rootMetadataPath) {
+        this.rootMetadataPath = rootMetadataPath;
     }
 
     @Override
@@ -63,12 +63,12 @@ public class ModuleNode implements Node<ModuleNode, ModuleMetadata> {
         if (o == null || getClass() != o.getClass()) return false;
         ModuleNode that = (ModuleNode) o;
         return Objects.equals(systemName, that.systemName) &&
-            Objects.equals(path, that.path) &&
+            Objects.equals(rootMetadataPath, that.rootMetadataPath) &&
             Objects.equals(metadata, that.metadata);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(systemName, path, metadata);
+        return Objects.hash(systemName, rootMetadataPath, metadata);
     }
 }

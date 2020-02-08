@@ -1,0 +1,11 @@
+{
+  "uuid": "a2d413ad-b922-4496-ac36-9d3dc4c75f38",
+  "description": "security package",
+  "systemName": "Security",
+  "fqnPackageParts": [
+    "com",
+    "security"
+  ],
+  "usedModules": [
+  ]
+}

@@ -2,8 +2,8 @@ package net.shaidullin.code_maker.core.node.utils;
 
 import net.shaidullin.code_maker.core.node.ElementNode;
 import net.shaidullin.code_maker.core.node.PackageNode;
-import net.shaidullin.code_maker.dto.metadata.DtoMetadata;
-import net.shaidullin.code_maker.dto.node.DtoNode;
+import net.shaidullin.code_maker.integration.impl.dto.metadata.DtoMetadata;
+import net.shaidullin.code_maker.integration.impl.dto.node.DtoNode;
 import net.shaidullin.code_maker.integration.IntegrationObject;
 
 public class LeafNodeUtils {

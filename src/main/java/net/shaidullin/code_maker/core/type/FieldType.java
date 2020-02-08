@@ -1,7 +1,6 @@
 package net.shaidullin.code_maker.core.type;
 
 import net.shaidullin.code_maker.core.metadata.LeafMetadata;
-import net.shaidullin.code_maker.dto.metadata.DtoMetadata;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;

@@ -1,4 +1,4 @@
-package net.shaidullin.code_maker.dto.metadata;
+package net.shaidullin.code_maker.integration.impl.dto.metadata;
 
 import net.shaidullin.code_maker.core.metadata.AbstractMetadata;
 import net.shaidullin.code_maker.core.metadata.FieldMetadata;

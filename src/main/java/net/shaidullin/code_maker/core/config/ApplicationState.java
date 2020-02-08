@@ -10,7 +10,7 @@ import net.shaidullin.code_maker.core.node.ModuleNode;
 import net.shaidullin.code_maker.core.node.PackageNode;
 import net.shaidullin.code_maker.core.node.utils.LeafNodeUtils;
 import net.shaidullin.code_maker.core.type.TypeManager;
-import net.shaidullin.code_maker.dto.DtoIntegrationObject;
+import net.shaidullin.code_maker.integration.impl.dto.DtoIntegrationObject;
 import net.shaidullin.code_maker.integration.IntegrationObject;
 import net.shaidullin.code_maker.integration.IntegrationObjectRegistry;
 import org.jetbrains.annotations.NotNull;
@@ -20,7 +20,7 @@ import java.util.*;
 
 @State(name = CodeMakerPlugin.ID_PLUGIN, storages = {@Storage("code-maker-idea.xml")})
 public class ApplicationState implements PersistentStateComponent<CMState> {
-    private static final String GENERATE_PATH = "generate-path";
+    public static final String GENERATE_PATH = "generate-path";
 
     private ElementNode usedElement;
     private PackageNode usedPackage;
@@ -30,7 +30,7 @@ public class ApplicationState implements PersistentStateComponent<CMState> {
     private Map<ElementNode, List<PackageNode>> packages = new HashMap<>();
     private Map<PackageNode, List<LeafNode>> leaves = new HashMap<>();
 
-    private CMState state = defaultApplicationSettings();
+    private CMState state = defaultCMState();
     private TypeManager typeManager;
     private final IntegrationObjectRegistry INTEGRATION_OBJECT_REGISTRY = new IntegrationObjectRegistry();
 
@@ -46,7 +46,7 @@ public class ApplicationState implements PersistentStateComponent<CMState> {
     }
 
     @NotNull
-    private CMState defaultApplicationSettings() {
+    private CMState defaultCMState() {
         return new CMState();
     }
 
@@ -56,8 +56,12 @@ public class ApplicationState implements PersistentStateComponent<CMState> {
     }
 
     @Override
-    public void loadState(@Nullable final CMState sourceApplicationSettings) {
-        state = Objects.requireNonNullElseGet(sourceApplicationSettings, this::defaultApplicationSettings);
+    public void loadState(@Nullable final CMState cmState) {
+        if (cmState != null) {
+            state = cmState;
+        } else {
+            state = this.defaultCMState();
+        }
     }
 
     @Nullable

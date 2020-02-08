@@ -1,6 +1,6 @@
 package net.shaidullin.code_maker.core.type;
 
-import net.shaidullin.code_maker.dto.metadata.DtoMetadata;
+import net.shaidullin.code_maker.integration.impl.dto.metadata.DtoMetadata;
 
 import java.util.UUID;
 

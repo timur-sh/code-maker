@@ -1,7 +1,10 @@
 package net.shaidullin.code_maker;
 
+import com.intellij.ide.plugins.IdeaPluginDescriptor;
+import com.intellij.ide.plugins.PluginManager;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.extensions.PluginId;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.apache.log4j.Level;
@@ -67,6 +70,14 @@ public final class CodeMakerPlugin implements ProjectComponent {
         LOG.debug("Project opened.");
     }
 
+    public static String currentPluginVersion() {
+        final IdeaPluginDescriptor plugin = PluginManager.getPlugin(PluginId.getId(ID_PLUGIN));
+        if (plugin != null) {
+            return plugin.getVersion();
+        }
+        return "unknown";
+    }
+
     @NotNull
     public String getComponentName() {
         return ID_PLUGIN;
@@ -77,5 +88,4 @@ public final class CodeMakerPlugin implements ProjectComponent {
 
     public void disposeComponent() {
     }
-
 }
