@@ -8,6 +8,7 @@ import net.shaidullin.code_maker.utils.FileUtils;
 import net.shaidullin.code_maker.utils.NodeUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -52,12 +53,12 @@ public interface ModuleTestData {
             .orElse(null);
     }
 
-    static void deleteAutoCleanState() {
+    static void deleteAutoCleanState() throws IOException {
         for (ModuleNode module : autoCleanState.getModules()) {
             for (IntegrationObject integrationObject : autoCleanState.getIntegrationObjects()) {
                 String pathToMetadata = FileUtils.buildPathToMetadata(module);
                 File file = new File(pathToMetadata, integrationObject.getFolder());
-                file.deleteOnExit();
+                org.apache.commons.io.FileUtils.deleteDirectory(file);
 
             }
         }

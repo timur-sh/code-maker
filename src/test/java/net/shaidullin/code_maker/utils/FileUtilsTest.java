@@ -8,6 +8,8 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
+import java.io.IOException;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -19,8 +21,8 @@ public class FileUtilsTest {
     }
 
     @AfterClass
-    public static void afterClass() {
-//        ModuleTestData.deleteAutoCleanState();
+    public static void afterClass() throws IOException {
+        ModuleTestData.deleteAutoCleanState();
     }
 
     @Test
