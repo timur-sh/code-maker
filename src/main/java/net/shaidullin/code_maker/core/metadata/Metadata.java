@@ -1,7 +1,6 @@
 package net.shaidullin.code_maker.core.metadata;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.UUID;
 
 public interface Metadata extends Serializable {
@@ -25,11 +24,4 @@ public interface Metadata extends Serializable {
     UUID getUuid();
 
     void setUuid(UUID uuid);
-
-    /**
-     * @return FQN parts of package name to the metadata item
-     */
-    List<String> getFqnPackageParts();
-
-    void setFqnPackageParts(List<String> fqnPackageParts);
 }

@@ -8,10 +8,6 @@ import java.util.List;
  * Contains metadata of module. Example of JSON config:
  * {
  * "systemName": "News",
- * "fqnPackageParts": [
- * "com",
- * "news"
- * ],
  * "usedModules": [
  * "Author"
  * ]
@@ -19,6 +15,7 @@ import java.util.List;
  */
 public class ModuleMetadata extends AbstractMetadata {
     private List<String> usedModules = new ArrayList<>();
+    private String fqnPackage;
 
     public ModuleMetadata() {
     }
@@ -29,5 +26,13 @@ public class ModuleMetadata extends AbstractMetadata {
 
     public void setUsedModules(List<String> usedModules) {
         this.usedModules = usedModules;
+    }
+
+    public String getFqnPackage() {
+        return fqnPackage;
+    }
+
+    public void setFqnPackage(String fqnPackage) {
+        this.fqnPackage = fqnPackage;
     }
 }

@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class FileUtils {
+    public static final String LEAF_METADATA_EXTENSION = "json";
     public static final String SEPARATOR = File.separator;
 
     public static boolean exists(String path, String name) {
@@ -45,7 +46,6 @@ public class FileUtils {
 
         return new ArrayList<>(Arrays.asList(directories));
     }
-
 
     /**
      * Read a content of the path and return names of existed files
@@ -133,15 +133,15 @@ public class FileUtils {
     }
 
     /**
-     * Save content
+     * Save generated content
      *
      * @param packageNode is used to build a path
      * @param name        is file name
      * @param content     to be stored
      */
-    public static void saveContent(ApplicationState state, PackageNode packageNode, String name, Object content) {
+    public static void saveGeneratedContent(ApplicationState state, PackageNode packageNode, String name, Object content) {
         String folder = buildPathToGeneratedData(state, packageNode);
-        String fileName = FileUtils.buildAbsoluteFileName(folder, name);
+        String fileName = FileUtils.buildLeafFileName(folder, name);
 
         try {
             saveContent(fileName, JsonUtils.getObjectMapper().writeValueAsString(content));
@@ -169,12 +169,12 @@ public class FileUtils {
         }
     }
 
-    public static String buildAbsoluteFileName(String directory, String fileName) {
-        return buildAbsoluteFileName(directory, fileName, "json");
+    public static String buildLeafFileName(String directory, String fileName) {
+        return buildLeafFileName(directory, fileName, LEAF_METADATA_EXTENSION);
     }
 
-    public static String buildAbsoluteFileName(String directory, String fileName, String extension) {
-        fileName = fileName + "." + extension;
+    public static String buildLeafFileName(String directory, String fileName, String extension) {
+        fileName = String.join(".", fileName, extension);
 
         File newFile = new File(directory, fileName);
         return newFile.getPath();

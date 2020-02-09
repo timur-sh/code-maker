@@ -1,14 +1,12 @@
 package net.shaidullin.code_maker.core.type;
 
-import net.shaidullin.code_maker.core.metadata.LeafMetadata;
-
 import java.util.Objects;
 import java.util.UUID;
 
-public abstract class AbstractFieldType<T extends LeafMetadata> implements FieldType<T> {
+public abstract class AbstractFieldType implements FieldType {
     private UUID uuid;
     private String name;
-    private String className;
+    private String fqnName;
     private boolean primitive;
     private boolean requiredImport;
 
@@ -36,13 +34,13 @@ public abstract class AbstractFieldType<T extends LeafMetadata> implements Field
     }
 
     @Override
-    public String getClassName() {
-        return className;
+    public String getFqnName() {
+        return fqnName;
     }
 
     @Override
-    public void setClassName(String className) {
-        this.className = className;
+    public void setFqnName(String fqnName) {
+        this.fqnName = fqnName;
     }
 
     @Override
@@ -74,11 +72,11 @@ public abstract class AbstractFieldType<T extends LeafMetadata> implements Field
             requiredImport == fieldType.requiredImport &&
             Objects.equals(uuid, fieldType.uuid) &&
             Objects.equals(name, fieldType.name) &&
-            Objects.equals(className, fieldType.className);
+            Objects.equals(fqnName, fieldType.fqnName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid, name, className, primitive, requiredImport);
+        return Objects.hash(uuid, name, fqnName, primitive, requiredImport);
     }
 }

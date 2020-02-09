@@ -1,6 +1,5 @@
 package net.shaidullin.code_maker.core.metadata;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -29,16 +28,6 @@ public class FieldMetadata extends AbstractMetadata {
     @Override
     public void setUuid(UUID uuid) {
         this.uuid = uuid;
-    }
-
-    @Override
-    public List<String> getFqnPackageParts() {
-        throw new UnsupportedOperationException("FieldMetadata.getFqnPackageParts()");
-    }
-
-    @Override
-    public void setFqnPackageParts(List<String> fqnPackageParts) {
-        throw new UnsupportedOperationException("FieldMetadata.setFqnPackageParts()");
     }
 
     @Override

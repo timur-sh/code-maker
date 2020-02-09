@@ -4,7 +4,10 @@ import net.shaidullin.code_maker.core.metadata.AbstractMetadata;
 import net.shaidullin.code_maker.core.metadata.FieldMetadata;
 import net.shaidullin.code_maker.core.metadata.LeafMetadata;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.UUID;
 
 public class DtoMetadata extends AbstractMetadata implements LeafMetadata {
     private UUID parentUID;
@@ -64,15 +67,5 @@ public class DtoMetadata extends AbstractMetadata implements LeafMetadata {
 
     public void setCacheKeyTypeUID(UUID cacheKeyTypeUID) {
         this.cacheKeyTypeUID = cacheKeyTypeUID;
-    }
-
-    @Override
-    public List<String> getFqnPackageParts() {
-        return null;
-    }
-
-    @Override
-    public void setFqnPackageParts(List<String> fqnPackageParts) {
-
     }
 }

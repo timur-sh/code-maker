@@ -7,21 +7,20 @@ import net.shaidullin.code_maker.core.node.ElementNode;
 import net.shaidullin.code_maker.core.node.LeafNode;
 import net.shaidullin.code_maker.core.node.ModuleNode;
 import net.shaidullin.code_maker.core.node.PackageNode;
-import net.shaidullin.code_maker.core.type.FieldType;
+import net.shaidullin.code_maker.core.type.FieldTypeUtils;
+import net.shaidullin.code_maker.core.type.MetadataFieldType;
 import net.shaidullin.code_maker.utils.FileUtils;
 import net.shaidullin.code_maker.utils.NodeUtils;
+import net.shaidullin.code_maker.utils.PackageUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
-public abstract class AbstractIntegrationObject<N extends PackageNode, M extends LeafMetadata, F extends FieldType<M>>
-    implements IntegrationObject<N, M, F> {
+public abstract class AbstractIntegrationObject<N extends PackageNode, M extends LeafMetadata>
+    implements IntegrationObject<N, M> {
     @Override
     public final void initialize(ModuleNode moduleNode) {
         // create folders of integration objects
@@ -41,7 +40,6 @@ public abstract class AbstractIntegrationObject<N extends PackageNode, M extends
         ElementMetadata metadata = new ElementMetadata();
         metadata.setUuid(UUID.randomUUID());
         metadata.setSystemName(elementNode.getSystemName());
-        metadata.getFqnPackageParts().add(this.getFolder());
         NodeUtils.writeMetadata(elementNode, metadata, false);
     }
 
@@ -67,5 +65,15 @@ public abstract class AbstractIntegrationObject<N extends PackageNode, M extends
         }
 
         return leafNodes;
+    }
+
+    @Override
+    public MetadataFieldType<LeafMetadata> buildFieldType(LeafNode node) {
+        Objects.requireNonNull(node.getMetadata());
+        String fqnName = PackageUtils.assembleFqnClassName(node);
+
+        return FieldTypeUtils.buildMetadataFieldType(node.getMetadata().getUuid(),
+            node.getMetadata().getSystemName(), false, true,
+            fqnName, node.getMetadata());
     }
 }

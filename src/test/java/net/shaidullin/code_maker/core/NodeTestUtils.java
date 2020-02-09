@@ -1,36 +1,72 @@
 package net.shaidullin.code_maker.core;
 
-import net.shaidullin.code_maker.core.metadata.ModuleMetadata;
-import net.shaidullin.code_maker.core.node.ModuleNode;
+import com.intellij.util.containers.ArrayListSet;
+import net.shaidullin.code_maker.core.metadata.PackageMetadata;
+import net.shaidullin.code_maker.core.node.ElementNode;
+import net.shaidullin.code_maker.core.node.LeafNode;
+import net.shaidullin.code_maker.core.node.PackageNode;
+import net.shaidullin.code_maker.integration.impl.dto.metadata.DtoMetadata;
+import net.shaidullin.code_maker.integration.impl.dto.node.DtoNode;
+import net.shaidullin.code_maker.utils.FileUtils;
+import net.shaidullin.code_maker.utils.NodeUtils;
 
+import java.io.File;
+import java.util.Objects;
 import java.util.UUID;
 
 public class NodeTestUtils {
-    public final static ModuleNode SECURITY_MODULE = createModuleNode("security", "/security",
-        "security", null);
+    public static final String AUTH_PACKAGE = "auth";
 
-    public final static ModuleNode NEWS_MODULE = createModuleNode("news", "/news",
-        "news", SECURITY_MODULE);
+    public static final String AUTHORIZATION_LEAF_NAME = "Authorization";
+    public static final String AUTHENTICATION_LEAF_NAME = "Authentication";
 
-    public static ModuleNode createModuleNode(String name, String rootPath, String secondPackageName,
-                                              ModuleNode usedModule) {
-        ModuleMetadata metadata = new ModuleMetadata();
+    /**
+     * Assemble package node and its metadata, than persist it
+     *
+     * @param elementNode
+     * @return
+     */
+    public static PackageNode addPackage(ElementNode elementNode) {
+        PackageMetadata metadata = new PackageMetadata();
+        metadata.setDescription("Auth package");
+        metadata.setSystemName(AUTH_PACKAGE);
+        metadata.setUuid(UUID.randomUUID());
 
-        if (usedModule != null) {
-            metadata.getUsedModules().add(usedModule.getSystemName());
-        }
+        PackageNode packageNode = new PackageNode();
+        packageNode.setSystemName(metadata.getSystemName());
+        packageNode.setIntegrationObject(Objects.requireNonNull(elementNode.getIntegrationObject()));
+        packageNode.setParent(elementNode);
+        packageNode.setMetadata(metadata);
 
-        metadata.setDescription("Module for testing purpose");
-        metadata.getFqnPackageParts().add("com");
-        metadata.getFqnPackageParts().add(secondPackageName);
+        File file = new File(
+            FileUtils.buildPathToMetadata(elementNode),
+            packageNode.getSystemName());
+        file.mkdirs();
+        NodeUtils.writeMetadata(packageNode, metadata, true);
+
+        return packageNode;
+    }
+
+    public static LeafNode addLeaf(String name, PackageNode packageNode) {
+        DtoMetadata metadata = new DtoMetadata();
+        metadata.setCachable(false);
+        metadata.setCacheKeyTypeUID(null);
+        metadata.setFields(new ArrayListSet<>());
+        metadata.setGeneric(false);
+        metadata.setGenericAlias(null);
+        metadata.setParentUID(null);
+        metadata.setDescription(name);
         metadata.setSystemName(name);
         metadata.setUuid(UUID.randomUUID());
 
-        ModuleNode moduleNode = new ModuleNode();
-        moduleNode.setRootMetadataPath(rootPath);
-        moduleNode.setSystemName(name);
-        moduleNode.setMetadata(metadata);
+        DtoNode dtoNode = new DtoNode();
+        dtoNode.setIntegrationObject(packageNode.getIntegrationObject());
+        dtoNode.setMetadata(metadata);
+        dtoNode.setParent(packageNode);
+        dtoNode.setSystemName(name);
 
-        return moduleNode;
+        NodeUtils.writeLeafMetadata(dtoNode, metadata);
+        return dtoNode;
     }
+
 }

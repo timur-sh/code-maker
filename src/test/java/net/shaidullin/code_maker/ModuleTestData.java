@@ -1,9 +1,13 @@
 package net.shaidullin.code_maker;
 
+import net.shaidullin.code_maker.core.NodeTestUtils;
 import net.shaidullin.code_maker.core.config.ApplicationState;
 import net.shaidullin.code_maker.core.config.CMState;
+import net.shaidullin.code_maker.core.node.ElementNode;
 import net.shaidullin.code_maker.core.node.ModuleNode;
+import net.shaidullin.code_maker.core.node.PackageNode;
 import net.shaidullin.code_maker.integration.IntegrationObject;
+import net.shaidullin.code_maker.integration.impl.dto.DtoIntegrationObject;
 import net.shaidullin.code_maker.utils.FileUtils;
 import net.shaidullin.code_maker.utils.NodeUtils;
 
@@ -13,6 +17,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import static org.junit.Assert.*;
 
 public interface ModuleTestData {
     Path FIXTURE_PATH = Paths.get("src", "test", "resources", "fixture");
@@ -41,6 +47,18 @@ public interface ModuleTestData {
         cmState.getConfiguration().put(ApplicationState.GENERATE_PATH, GENERATED_FILES_PATH.toString());
 
         autoCleanState.loadState(cmState);
+        autoCleanState.refreshState();
+
+        ElementNode dtoElementNode = ModuleTestData.autoCleanState.getElements()
+            .get(securityModuleNode).stream()
+            .filter(elementNode -> new DtoIntegrationObject().getFolder().equals(elementNode.getSystemName()))
+            .findFirst()
+            .orElse(null);
+        assertNotNull(dtoElementNode);
+        PackageNode package1 = NodeTestUtils.addPackage(dtoElementNode);
+        NodeTestUtils.addLeaf(NodeTestUtils.AUTHENTICATION_LEAF_NAME, package1);
+        NodeTestUtils.addLeaf(NodeTestUtils.AUTHORIZATION_LEAF_NAME, package1);
+
         autoCleanState.refreshState();
 
         return autoCleanState;

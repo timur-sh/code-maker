@@ -14,7 +14,7 @@ public class ModuleValidator extends AbstractValidator {
             result.add("System name is empty");
         }
 
-        if (CollectionUtils.isEmpty(moduleNode.getMetadata().getFqnPackageParts())) {
+        if (StringUtils.isBlank(moduleNode.getMetadata().getFqnPackage())) {
             valid = false;
             result.add("Package name is empty");
         }

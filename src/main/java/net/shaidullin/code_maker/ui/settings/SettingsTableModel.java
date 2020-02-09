@@ -3,7 +3,6 @@ package net.shaidullin.code_maker.ui.settings;
 
 import net.shaidullin.code_maker.core.config.ApplicationState;
 import net.shaidullin.code_maker.core.node.ModuleNode;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
@@ -91,7 +90,7 @@ public class SettingsTableModel extends AbstractTableModel {
                 return moduleNode.getRootMetadataPath();
 
             case PACKAGE_NAME:
-                return StringUtils.join(moduleNode.getMetadata().getFqnPackageParts(), '.');
+                return moduleNode.getMetadata().getFqnPackage();
 
             default:
                 throw new IllegalArgumentException("Invalid column: " + columnIndex);

@@ -1,10 +1,12 @@
 package net.shaidullin.code_maker.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import net.shaidullin.code_maker.core.metadata.LeafMetadata;
 import net.shaidullin.code_maker.core.metadata.Metadata;
 import net.shaidullin.code_maker.core.metadata.MetadataSettings;
 import net.shaidullin.code_maker.core.metadata.ModuleMetadata;
 import net.shaidullin.code_maker.core.node.IoNode;
+import net.shaidullin.code_maker.core.node.LeafNode;
 import net.shaidullin.code_maker.core.node.ModuleNode;
 import net.shaidullin.code_maker.core.node.Node;
 
@@ -49,10 +51,7 @@ public class NodeUtils {
         }
 
         try (FileInputStream inputStream = new FileInputStream(file)) {
-            M metadata = JsonUtils.readValue(inputStream, metadataClass);
-            metadata.getFqnPackageParts().add(node.getSystemName());
-
-            return metadata;
+            return JsonUtils.readValue(inputStream, metadataClass);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -73,6 +72,15 @@ public class NodeUtils {
         }
 
         writeMetadata(file.getAbsolutePath(), metadata);
+    }
+
+    /**
+     * Save leaf metadata to JSON file
+     */
+    public static void writeLeafMetadata(LeafNode node, LeafMetadata leafMetadata) {
+        String pathToMetadata = FileUtils.buildPathToMetadata(node);
+        String absoluteFileName = String.join(".", pathToMetadata, FileUtils.LEAF_METADATA_EXTENSION);
+        writeMetadata(absoluteFileName, leafMetadata);
     }
 
     /**

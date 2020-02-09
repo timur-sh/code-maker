@@ -1,7 +1,5 @@
 package net.shaidullin.code_maker.core.metadata;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -11,7 +9,6 @@ public abstract class AbstractMetadata implements Metadata {
     protected UUID uuid;
     protected String systemName;
     protected String description;
-    protected List<String> fqnPackageParts = new ArrayList<>();
 
     public AbstractMetadata() {
     }
@@ -44,15 +41,5 @@ public abstract class AbstractMetadata implements Metadata {
     @Override
     public void setUuid(UUID uuid) {
         this.uuid = uuid;
-    }
-
-    @Override
-    public List<String> getFqnPackageParts() {
-        return fqnPackageParts;
-    }
-
-    @Override
-    public void setFqnPackageParts(List<String> fqnPackageParts) {
-        this.fqnPackageParts = fqnPackageParts;
     }
 }
