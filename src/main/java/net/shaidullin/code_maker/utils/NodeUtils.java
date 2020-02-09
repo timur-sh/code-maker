@@ -5,7 +5,7 @@ import net.shaidullin.code_maker.core.metadata.LeafMetadata;
 import net.shaidullin.code_maker.core.metadata.Metadata;
 import net.shaidullin.code_maker.core.metadata.MetadataSettings;
 import net.shaidullin.code_maker.core.metadata.ModuleMetadata;
-import net.shaidullin.code_maker.core.node.IoNode;
+import net.shaidullin.code_maker.core.node.IeNode;
 import net.shaidullin.code_maker.core.node.LeafNode;
 import net.shaidullin.code_maker.core.node.ModuleNode;
 import net.shaidullin.code_maker.core.node.Node;
@@ -42,7 +42,7 @@ public class NodeUtils {
      * @param <M>
      * @return
      */
-    public static <M extends Metadata> M readMetadata(IoNode node, Class<M> metadataClass) {
+    public static <M extends Metadata> M readMetadata(IeNode node, Class<M> metadataClass) {
         String pathToMetadata = FileUtils.buildPathToMetadata(node);
 
         File file = new File(pathToMetadata, MetadataSettings.METADATA_FILE_NAME);

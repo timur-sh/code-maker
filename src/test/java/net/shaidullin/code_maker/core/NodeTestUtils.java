@@ -34,7 +34,7 @@ public class NodeTestUtils {
 
         PackageNode packageNode = new PackageNode();
         packageNode.setSystemName(metadata.getSystemName());
-        packageNode.setIntegrationObject(Objects.requireNonNull(elementNode.getIntegrationObject()));
+        packageNode.setIntegrationElement(Objects.requireNonNull(elementNode.getIntegrationElement()));
         packageNode.setParent(elementNode);
         packageNode.setMetadata(metadata);
 
@@ -60,7 +60,7 @@ public class NodeTestUtils {
         metadata.setUuid(UUID.randomUUID());
 
         DtoNode dtoNode = new DtoNode();
-        dtoNode.setIntegrationObject(packageNode.getIntegrationObject());
+        dtoNode.setIntegrationElement(packageNode.getIntegrationElement());
         dtoNode.setMetadata(metadata);
         dtoNode.setParent(packageNode);
         dtoNode.setSystemName(name);

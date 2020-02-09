@@ -6,7 +6,7 @@ import net.shaidullin.code_maker.core.node.ElementNode;
 import net.shaidullin.code_maker.core.node.LeafNode;
 import net.shaidullin.code_maker.core.node.ModuleNode;
 import net.shaidullin.code_maker.core.node.PackageNode;
-import net.shaidullin.code_maker.integration.IntegrationObject;
+import net.shaidullin.code_maker.integration.IntegrationElement;
 import net.shaidullin.code_maker.integration.IoUtils;
 import net.shaidullin.code_maker.utils.FileUtils;
 import net.shaidullin.code_maker.utils.NodeUtils;
@@ -51,7 +51,7 @@ public class ConfigurationManager {
                 for (ModuleNode module : state.getModules()) {
                     MODULES.add(module);
 
-                    for (IntegrationObject integrationObject : state.getIntegrationObjects()) {
+                    for (IntegrationElement integrationObject : state.getIntegrationObjects()) {
                         integrationObject.initialize(module);
                         loadElementsByModule(module, integrationObject);
                     }
@@ -83,14 +83,14 @@ public class ConfigurationManager {
     }
 
     private void reloadPackage(PackageNode packageNode) {
-        loadPackagesByElement(packageNode.getParent(), packageNode.getIntegrationObject());
+        loadPackagesByElement(packageNode.getParent(), packageNode.getIntegrationElement());
     }
 
     private void reloadElement(ElementNode elementNode) {
-        loadElementsByModule(elementNode.getParent(), elementNode.getIntegrationObject());
+        loadElementsByModule(elementNode.getParent(), elementNode.getIntegrationElement());
     }
 
-    private void loadElementsByModule(ModuleNode module, IntegrationObject integrationObject) {
+    private void loadElementsByModule(ModuleNode module, IntegrationElement integrationObject) {
         if (ELEMENTS.containsKey(module)) {
             ELEMENTS.get(module).removeIf(elementNode ->
                 elementNode.getSystemName().equals(integrationObject.getFolder()));
@@ -110,7 +110,7 @@ public class ConfigurationManager {
         ELEMENTS.get(module).add(elementNode);
     }
 
-    private void loadPackagesByElement(ElementNode elementNode, IntegrationObject integrationObject) {
+    private void loadPackagesByElement(ElementNode elementNode, IntegrationElement integrationObject) {
         PACKAGES.remove(elementNode);
         PACKAGES.put(elementNode, new ArrayList<>());
         List<PackageNode> packageNodes = PACKAGES.get(elementNode);
@@ -132,7 +132,7 @@ public class ConfigurationManager {
     }
 
     @SuppressWarnings("unchecked")
-    private void loadClassesByPackage(PackageNode packageNode, IntegrationObject integrationObject) {
+    private void loadClassesByPackage(PackageNode packageNode, IntegrationElement integrationObject) {
         LEAVES.remove(packageNode);
         LEAVES.put(packageNode, new ArrayList<>());
 

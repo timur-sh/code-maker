@@ -4,7 +4,7 @@ import net.shaidullin.code_maker.ModuleTestData;
 import net.shaidullin.code_maker.core.NodeTestUtils;
 import net.shaidullin.code_maker.core.metadata.MetadataSettings;
 import net.shaidullin.code_maker.core.node.*;
-import net.shaidullin.code_maker.integration.impl.dto.DtoIntegrationObject;
+import net.shaidullin.code_maker.integration.impl.dto.DtoIntegrationElement;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
@@ -41,7 +41,7 @@ public class NodeTest {
         // test ElementNode
         ElementNode dtoElementNode = ModuleTestData.autoCleanState.getElements()
             .get(securityNode).stream()
-            .filter(elementNode -> new DtoIntegrationObject().getFolder().equals(elementNode.getSystemName()))
+            .filter(elementNode -> new DtoIntegrationElement().getFolder().equals(elementNode.getSystemName()))
             .findFirst()
             .orElse(null);
         assertNotNull("Dto node is found", dtoElementNode);

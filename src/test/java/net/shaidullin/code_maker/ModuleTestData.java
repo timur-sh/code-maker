@@ -6,8 +6,8 @@ import net.shaidullin.code_maker.core.config.CMState;
 import net.shaidullin.code_maker.core.node.ElementNode;
 import net.shaidullin.code_maker.core.node.ModuleNode;
 import net.shaidullin.code_maker.core.node.PackageNode;
-import net.shaidullin.code_maker.integration.IntegrationObject;
-import net.shaidullin.code_maker.integration.impl.dto.DtoIntegrationObject;
+import net.shaidullin.code_maker.integration.IntegrationElement;
+import net.shaidullin.code_maker.integration.impl.dto.DtoIntegrationElement;
 import net.shaidullin.code_maker.utils.FileUtils;
 import net.shaidullin.code_maker.utils.NodeUtils;
 
@@ -51,7 +51,7 @@ public interface ModuleTestData {
 
         ElementNode dtoElementNode = ModuleTestData.autoCleanState.getElements()
             .get(securityModuleNode).stream()
-            .filter(elementNode -> new DtoIntegrationObject().getFolder().equals(elementNode.getSystemName()))
+            .filter(elementNode -> new DtoIntegrationElement().getFolder().equals(elementNode.getSystemName()))
             .findFirst()
             .orElse(null);
         assertNotNull(dtoElementNode);
@@ -73,7 +73,7 @@ public interface ModuleTestData {
 
     static void deleteAutoCleanState() throws IOException {
         for (ModuleNode module : autoCleanState.getModules()) {
-            for (IntegrationObject integrationObject : autoCleanState.getIntegrationObjects()) {
+            for (IntegrationElement integrationObject : autoCleanState.getIntegrationObjects()) {
                 String pathToMetadata = FileUtils.buildPathToMetadata(module);
                 File file = new File(pathToMetadata, integrationObject.getFolder());
                 org.apache.commons.io.FileUtils.deleteDirectory(file);

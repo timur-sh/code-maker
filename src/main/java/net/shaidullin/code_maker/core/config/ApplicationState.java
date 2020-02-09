@@ -10,9 +10,9 @@ import net.shaidullin.code_maker.core.node.ModuleNode;
 import net.shaidullin.code_maker.core.node.PackageNode;
 import net.shaidullin.code_maker.core.node.utils.LeafNodeUtils;
 import net.shaidullin.code_maker.core.type.TypeManager;
-import net.shaidullin.code_maker.integration.impl.dto.DtoIntegrationObject;
-import net.shaidullin.code_maker.integration.IntegrationObject;
-import net.shaidullin.code_maker.integration.IntegrationObjectRegistry;
+import net.shaidullin.code_maker.integration.impl.dto.DtoIntegrationElement;
+import net.shaidullin.code_maker.integration.IntegrationElement;
+import net.shaidullin.code_maker.integration.IntegrationElementRegistry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -32,7 +32,7 @@ public class ApplicationState implements PersistentStateComponent<CMState> {
 
     private CMState state = defaultCMState();
     private TypeManager typeManager;
-    private final IntegrationObjectRegistry INTEGRATION_OBJECT_REGISTRY = new IntegrationObjectRegistry();
+    private final IntegrationElementRegistry INTEGRATION_OBJECT_REGISTRY = new IntegrationElementRegistry();
 
 
     public ApplicationState() {
@@ -40,7 +40,7 @@ public class ApplicationState implements PersistentStateComponent<CMState> {
     }
 
     private void initialize() {
-        INTEGRATION_OBJECT_REGISTRY.register(new DtoIntegrationObject());
+        INTEGRATION_OBJECT_REGISTRY.register(new DtoIntegrationElement());
 
         typeManager = TypeManager.getInstance();
     }
@@ -138,7 +138,7 @@ public class ApplicationState implements PersistentStateComponent<CMState> {
         return leaves;
     }
 
-    public Collection<IntegrationObject> getIntegrationObjects() {
+    public Collection<IntegrationElement> getIntegrationObjects() {
         return INTEGRATION_OBJECT_REGISTRY.getAll();
     }
 

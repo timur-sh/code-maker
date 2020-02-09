@@ -2,7 +2,6 @@ package net.shaidullin.code_maker.core.node;
 
 import com.intellij.util.xmlb.annotations.Transient;
 import net.shaidullin.code_maker.core.metadata.ModuleMetadata;
-import net.shaidullin.code_maker.integration.IntegrationObject;
 
 import java.util.Objects;
 

@@ -2,18 +2,18 @@ package net.shaidullin.code_maker.core.node;
 
 import com.intellij.util.xmlb.annotations.Transient;
 import net.shaidullin.code_maker.core.metadata.PackageMetadata;
-import net.shaidullin.code_maker.integration.IntegrationObject;
+import net.shaidullin.code_maker.integration.IntegrationElement;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Package node
  */
-public class PackageNode implements IoNode<ElementNode, PackageMetadata>, Comparable<PackageNode> {
+public class PackageNode implements IeNode<ElementNode, PackageMetadata>, Comparable<PackageNode> {
     private String systemName;
     private ElementNode parent;
 
     @Transient
-    private IntegrationObject integrationObject;
+    private IntegrationElement integrationObject;
 
     @Transient
     private PackageMetadata metadata;
@@ -21,7 +21,7 @@ public class PackageNode implements IoNode<ElementNode, PackageMetadata>, Compar
     public PackageNode() {
     }
 
-    public PackageNode(String systemName, ElementNode parent, IntegrationObject integrationObject) {
+    public PackageNode(String systemName, ElementNode parent, IntegrationElement integrationObject) {
         this.systemName = systemName;
         this.parent = parent;
         this.integrationObject = integrationObject;
@@ -63,12 +63,12 @@ public class PackageNode implements IoNode<ElementNode, PackageMetadata>, Compar
     }
 
     @Override
-    public IntegrationObject getIntegrationObject() {
+    public IntegrationElement getIntegrationElement() {
         return this.integrationObject;
     }
 
     @Override
-    public void setIntegrationObject(IntegrationObject integrationObject) {
-        this.integrationObject = integrationObject;
+    public void setIntegrationElement(IntegrationElement integrationElement) {
+        this.integrationObject = integrationElement;
     }
 }

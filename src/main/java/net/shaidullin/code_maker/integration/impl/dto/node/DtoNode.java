@@ -2,8 +2,8 @@ package net.shaidullin.code_maker.integration.impl.dto.node;
 
 import net.shaidullin.code_maker.core.node.LeafNode;
 import net.shaidullin.code_maker.core.node.PackageNode;
+import net.shaidullin.code_maker.integration.IntegrationElement;
 import net.shaidullin.code_maker.integration.impl.dto.metadata.DtoMetadata;
-import net.shaidullin.code_maker.integration.IntegrationObject;
 
 /**
  * DTO node is contained in package
@@ -11,16 +11,16 @@ import net.shaidullin.code_maker.integration.IntegrationObject;
 public class DtoNode implements LeafNode<PackageNode, DtoMetadata> {
     private String systemName;
     private PackageNode parent;
-    private IntegrationObject integrationObject;
+    private IntegrationElement integrationElement;
     private DtoMetadata metadata;
 
     public DtoNode() {
     }
 
-    public DtoNode(String systemName, PackageNode parent, IntegrationObject integrationObject) {
+    public DtoNode(String systemName, PackageNode parent, IntegrationElement integrationElement) {
         this.systemName = systemName;
         this.parent = parent;
-        this.integrationObject = integrationObject;
+        this.integrationElement = integrationElement;
     }
 
     @Override
@@ -54,13 +54,13 @@ public class DtoNode implements LeafNode<PackageNode, DtoMetadata> {
     }
 
     @Override
-    public IntegrationObject getIntegrationObject() {
-        return integrationObject;
+    public IntegrationElement getIntegrationElement() {
+        return integrationElement;
     }
 
     @Override
-    public void setIntegrationObject(IntegrationObject integrationObject) {
-        this.integrationObject = integrationObject;
+    public void setIntegrationElement(IntegrationElement integrationElement) {
+        this.integrationElement = integrationElement;
     }
 
 }

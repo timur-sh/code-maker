@@ -6,10 +6,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.function.Consumer;
 
-public class IntegrationObjectRegistry implements Iterable<IntegrationObject> {
-    private Map<String, IntegrationObject> REGISTRY = new HashMap<>();
+public class IntegrationElementRegistry implements Iterable<IntegrationElement> {
+    private Map<String, IntegrationElement> REGISTRY = new HashMap<>();
 
-    public IntegrationObjectRegistry() {
+    public IntegrationElementRegistry() {
     }
 
     /**
@@ -18,7 +18,7 @@ public class IntegrationObjectRegistry implements Iterable<IntegrationObject> {
      * @param integrationObject
      * @throws IllegalArgumentException if the integration object is registered
      */
-    public void register(IntegrationObject integrationObject) {
+    public void register(IntegrationElement integrationObject) {
         if (REGISTRY.containsKey(integrationObject.getUID())) {
             throw new IllegalArgumentException(String.format("Integration object with the UUID='%s' is already registered.", integrationObject.getUID()));
         }
@@ -27,7 +27,7 @@ public class IntegrationObjectRegistry implements Iterable<IntegrationObject> {
     }
 
     @Nullable
-    public IntegrationObject getByUID(String uid) {
+    public IntegrationElement getByUID(String uid) {
         return REGISTRY.get(uid);
     }
 
@@ -35,25 +35,25 @@ public class IntegrationObjectRegistry implements Iterable<IntegrationObject> {
         REGISTRY.remove(uid);
     }
 
-    public Collection<IntegrationObject> getAll() {
+    public Collection<IntegrationElement> getAll() {
         return REGISTRY.values();
     }
 
     @NotNull
     @Override
-    public Iterator<IntegrationObject> iterator() {
+    public Iterator<IntegrationElement> iterator() {
         return REGISTRY.values().iterator();
     }
 
     @Override
-    public void forEach(Consumer<? super IntegrationObject> action) {
-        for (IntegrationObject value : REGISTRY.values()) {
+    public void forEach(Consumer<? super IntegrationElement> action) {
+        for (IntegrationElement value : REGISTRY.values()) {
             action.accept(value);
         }
     }
 
     @Override
-    public Spliterator<IntegrationObject> spliterator() {
+    public Spliterator<IntegrationElement> spliterator() {
         return REGISTRY.values().spliterator();
     }
 }

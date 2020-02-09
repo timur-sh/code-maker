@@ -1,24 +1,24 @@
 package net.shaidullin.code_maker.core.node;
 
 import net.shaidullin.code_maker.core.metadata.ElementMetadata;
-import net.shaidullin.code_maker.integration.IntegrationObject;
+import net.shaidullin.code_maker.integration.IntegrationElement;
 
 import java.util.Objects;
 
 /**
  * Мета данные элементов
  */
-public class ElementNode implements IoNode<ModuleNode, ElementMetadata> {
+public class ElementNode implements IeNode<ModuleNode, ElementMetadata> {
     private String systemName;
     private ModuleNode parent;
     private ElementMetadata metadata;
-    private IntegrationObject integrationObject;
+    private IntegrationElement integrationObject;
 
     public ElementNode() {
     }
 
     public ElementNode(String systemName, ModuleNode parent,
-                       IntegrationObject integrationObject) {
+                       IntegrationElement integrationObject) {
         this.systemName = systemName;
         this.parent = parent;
         this.integrationObject = integrationObject;
@@ -55,13 +55,13 @@ public class ElementNode implements IoNode<ModuleNode, ElementMetadata> {
     }
 
     @Override
-    public IntegrationObject getIntegrationObject() {
+    public IntegrationElement getIntegrationElement() {
         return this.integrationObject;
     }
 
     @Override
-    public void setIntegrationObject(IntegrationObject integrationObject) {
-        this.integrationObject = integrationObject;
+    public void setIntegrationElement(IntegrationElement integrationElement) {
+        this.integrationObject = integrationElement;
     }
 
     @Override

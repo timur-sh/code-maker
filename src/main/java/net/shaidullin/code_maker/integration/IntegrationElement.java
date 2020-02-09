@@ -3,9 +3,7 @@ package net.shaidullin.code_maker.integration;
 import net.shaidullin.code_maker.core.metadata.LeafMetadata;
 import net.shaidullin.code_maker.core.node.LeafNode;
 import net.shaidullin.code_maker.core.node.ModuleNode;
-import net.shaidullin.code_maker.core.node.Node;
 import net.shaidullin.code_maker.core.node.PackageNode;
-import net.shaidullin.code_maker.core.type.FieldType;
 import net.shaidullin.code_maker.core.type.MetadataFieldType;
 
 import java.io.FileInputStream;
@@ -14,7 +12,7 @@ import java.util.List;
 /**
  * It provides a business object such as DTO, Entity, Service etc.
  */
-public interface IntegrationObject<N extends PackageNode, M extends LeafMetadata> {
+public interface IntegrationElement<N extends PackageNode, M extends LeafMetadata> {
     /**
      * Each integration object must provide unique UID
      *
@@ -65,5 +63,5 @@ public interface IntegrationObject<N extends PackageNode, M extends LeafMetadata
      *
      * @return list of IntegrationObject's classes
      */
-    List<Class<IntegrationObject>> declareDependencies();
+    List<Class<IntegrationElement>> declareDependencies();
 }

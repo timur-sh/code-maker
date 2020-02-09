@@ -59,7 +59,7 @@ public class TypeManager {
 
                 fieldTypeMap.put(
                     metadata.getUuid(),
-                    leafNode.getIntegrationObject().buildFieldType(leafNode)
+                    leafNode.getIntegrationElement().buildFieldType(leafNode)
                 );
             }
         }

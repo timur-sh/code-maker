@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.util.*;
 
 public abstract class AbstractIntegrationObject<N extends PackageNode, M extends LeafMetadata>
-    implements IntegrationObject<N, M> {
+    implements IntegrationElement<N, M> {
     @Override
     public final void initialize(ModuleNode moduleNode) {
         // create folders of integration objects
