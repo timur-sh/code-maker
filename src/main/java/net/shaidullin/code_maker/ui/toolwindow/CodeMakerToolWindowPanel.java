@@ -27,8 +27,8 @@ public class CodeMakerToolWindowPanel extends JPanel {
     private WorkspacePanel workspacePanel;
 
 
-    private ModuleNode activeModule;
-    private ElementNode activeElement;
+    //    private ModuleNode activeModule;
+//    private ElementNode activeElement;
     private final ComboBox<ModuleNode> modulesComboBox = new ComboBox<>();
     private final DefaultComboBoxModel<ModuleNode> modulesModel = new DefaultComboBoxModel<>();
 
@@ -62,7 +62,7 @@ public class CodeMakerToolWindowPanel extends JPanel {
 
         JSplitPane jSplitPane = new JSplitPane(
             JSplitPane.HORIZONTAL_SPLIT,
-            nodeTreePanel.createPanel(activeElement),
+            nodeTreePanel.createPanel((ElementNode) elementComboBox.getSelectedItem()),
             workspacePanel.createPanel()
         );
 
@@ -101,22 +101,23 @@ public class CodeMakerToolWindowPanel extends JPanel {
     }
 
     private void initializeComboBoxes() {
+        state.refreshState();
         modulesComboBox.setModel(modulesModel);
         int preferredHeight = modulesComboBox.getPreferredSize().height;
         modulesComboBox.setPreferredSize(new Dimension(250, preferredHeight));
         modulesComboBox.setMaximumSize(new Dimension(350, preferredHeight));
         modulesComboBox.addActionListener((ActionEvent e) -> {
-            activeModule = (ModuleNode) ((ComboBox) e.getSource()).getSelectedItem();
-            refreshElements();
+//            activeModule = (ModuleNode) ((ComboBox) e.getSource()).getSelectedItem();
+            refreshElements((ModuleNode) ((ComboBox) e.getSource()).getSelectedItem());
         });
 
         elementComboBox.setModel(elementModel);
         elementComboBox.setPreferredSize(new Dimension(250, preferredHeight));
         elementComboBox.setMaximumSize(new Dimension(350, preferredHeight));
         elementComboBox.addActionListener((ActionEvent e) -> {
-            activeElement = (ElementNode) ((ComboBox) e.getSource()).getSelectedItem();
+//            activeElement = (ElementNode) ((ComboBox) e.getSource()).getSelectedItem();
             if (nodeTreePanel != null) {
-                nodeTreePanel.refresh(activeElement);
+                nodeTreePanel.refresh((ElementNode) ((ComboBox) e.getSource()).getSelectedItem());
             }
         });
 
@@ -128,46 +129,45 @@ public class CodeMakerToolWindowPanel extends JPanel {
      */
     public void refreshAll() {
         ModuleNode selectedModule = (ModuleNode) modulesComboBox.getSelectedItem();
-        ElementNode selectedElement = (ElementNode) elementComboBox.getSelectedItem();
 
         modulesComboBox.removeAll();
         modulesModel.removeAllElements();
         for (ModuleNode module : state.getModules()) {
-            if (activeModule == null) {
-                activeModule = module;
+            if (selectedModule == null) { // select first module if no one selected
+                selectedModule = module;
             }
             modulesModel.addElement(module);
         }
 
-        refreshElements();
-        if (nodeTreePanel != null) {
-            nodeTreePanel.refresh(activeElement);
-        }
-
         modulesComboBox.setSelectedItem(selectedModule);
-        elementComboBox.setSelectedItem(selectedElement);
+        refreshElements(selectedModule);
+        if (nodeTreePanel != null) {
+            nodeTreePanel.refresh((ElementNode) elementComboBox.getSelectedItem());
+        }
     }
 
 
     /**
      * Обновить элементы выбранной модели
      */
-    private void refreshElements() {
+    private void refreshElements(ModuleNode moduleNode) {
+        ElementNode selectedElement = (ElementNode) elementComboBox.getSelectedItem();
+
         elementComboBox.removeAll();
         elementModel.removeAllElements();
-        if (activeModule != null && state.getElements() != null) {
-            if (state.getElements().get(activeModule) == null) {
+        if (moduleNode != null && state.getElements() != null) {
+            if (state.getElements().get(moduleNode) == null) {
                 return;
             }
 
-            for (ElementNode elementNode : state.getElements().get(activeModule)) {
-                if (activeElement == null) {
-                    activeElement = elementNode;
+            for (ElementNode elementNode : state.getElements().get(moduleNode)) {
+                if (selectedElement == null) {
+                    selectedElement = elementNode;
                 }
 
                 elementModel.addElement(elementNode);
             }
         }
-
+        elementComboBox.setSelectedItem(selectedElement);
     }
 }

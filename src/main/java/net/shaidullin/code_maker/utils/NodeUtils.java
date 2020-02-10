@@ -21,7 +21,7 @@ public class NodeUtils {
         String pathToMetadata = FileUtils.buildPathToMetadata(node);
         File file = new File(pathToMetadata, String.join(".", node.getSystemName(), "json"));
         if (!file.exists()) {
-            throw new RuntimeException("File not found. Name=" + pathToMetadata);
+            throw new RuntimeException("File not found. Name=" + file.getAbsolutePath());
         }
 
         try {
