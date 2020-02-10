@@ -49,6 +49,7 @@ public class ConfigurationManager {
                 MODULES.clear();
 
                 for (ModuleNode module : state.getModules()) {
+                    NodeUtils.reloadMetadata(module);
                     MODULES.add(module);
 
                     for (IntegrationElement integrationObject : state.getIntegrationObjects()) {

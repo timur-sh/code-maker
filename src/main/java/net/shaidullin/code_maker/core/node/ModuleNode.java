@@ -11,8 +11,6 @@ import java.util.Objects;
 public class ModuleNode implements Node<ModuleNode, ModuleMetadata> {
     private String systemName;
     private String rootMetadataPath;
-
-    @Transient
     private ModuleMetadata metadata;
 
     public ModuleNode() {
@@ -38,11 +36,13 @@ public class ModuleNode implements Node<ModuleNode, ModuleMetadata> {
         throw new UnsupportedOperationException("ModuleNode.getParent() not supported for ModuleNode");
     }
 
+    @Transient
     @Override
     public ModuleMetadata getMetadata() {
         return this.metadata;
     }
 
+    @Transient
     @Override
     public void setMetadata(ModuleMetadata metadata) {
         this.metadata = metadata;
@@ -69,5 +69,10 @@ public class ModuleNode implements Node<ModuleNode, ModuleMetadata> {
     @Override
     public int hashCode() {
         return Objects.hash(systemName, rootMetadataPath, metadata);
+    }
+
+    @Override
+    public String toString() {
+        return this.systemName;
     }
 }

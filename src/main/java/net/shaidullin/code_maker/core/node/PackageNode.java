@@ -1,9 +1,10 @@
 package net.shaidullin.code_maker.core.node;
 
-import com.intellij.util.xmlb.annotations.Transient;
 import net.shaidullin.code_maker.core.metadata.PackageMetadata;
 import net.shaidullin.code_maker.integration.IntegrationElement;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
 
 /**
  * Package node
@@ -12,10 +13,8 @@ public class PackageNode implements IeNode<ElementNode, PackageMetadata>, Compar
     private String systemName;
     private ElementNode parent;
 
-    @Transient
     private IntegrationElement integrationObject;
 
-    @Transient
     private PackageMetadata metadata;
 
     public PackageNode() {
@@ -70,5 +69,26 @@ public class PackageNode implements IeNode<ElementNode, PackageMetadata>, Compar
     @Override
     public void setIntegrationElement(IntegrationElement integrationElement) {
         this.integrationObject = integrationElement;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PackageNode that = (PackageNode) o;
+        return Objects.equals(systemName, that.systemName) &&
+            Objects.equals(parent, that.parent) &&
+            Objects.equals(integrationObject, that.integrationObject) &&
+            Objects.equals(metadata, that.metadata);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(systemName, parent, integrationObject, metadata);
+    }
+
+    @Override
+    public String toString() {
+        return this.systemName;
     }
 }
