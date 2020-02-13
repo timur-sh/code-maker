@@ -2,27 +2,25 @@ package net.shaidullin.code_maker.core.node;
 
 import net.shaidullin.code_maker.core.metadata.FieldMetadata;
 
+import java.util.Objects;
+
 public class FieldNode implements Node<LeafNode, FieldMetadata> {
-    private String systemName;
     private LeafNode parent;
     private FieldMetadata metadata;
 
-    public FieldNode() {
-    }
-
-    public FieldNode(String systemName, LeafNode parent) {
-        this.systemName = systemName;
+    public FieldNode(FieldMetadata fieldMetadata, LeafNode parent) {
+        this.metadata = fieldMetadata;
         this.parent = parent;
     }
 
     @Override
     public String getSystemName() {
-        return this.systemName;
+        return metadata.getSystemName();
     }
 
     @Override
     public void setSystemName(String systemName) {
-        this.systemName = systemName;
+        metadata.setSystemName(systemName);
     }
 
     @Override
@@ -43,5 +41,19 @@ public class FieldNode implements Node<LeafNode, FieldMetadata> {
     @Override
     public void setMetadata(FieldMetadata metadata) {
         this.metadata = metadata;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof FieldNode)) return false;
+        FieldNode fieldNode = (FieldNode) o;
+        return Objects.equals(parent, fieldNode.parent) &&
+            Objects.equals(metadata, fieldNode.metadata);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(parent, metadata);
     }
 }

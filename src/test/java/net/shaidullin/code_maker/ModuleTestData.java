@@ -73,7 +73,7 @@ public interface ModuleTestData {
 
     static void deleteAutoCleanState() throws IOException {
         for (ModuleNode module : autoCleanState.getModules()) {
-            for (IntegrationElement integrationObject : autoCleanState.getIntegrationObjects()) {
+            for (IntegrationElement integrationObject : autoCleanState.getIntegrationElements()) {
                 String pathToMetadata = FileUtils.buildPathToMetadata(module);
                 File file = new File(pathToMetadata, integrationObject.getFolder());
                 org.apache.commons.io.FileUtils.deleteDirectory(file);

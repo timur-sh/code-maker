@@ -52,7 +52,7 @@ public class ConfigurationManager {
                     NodeUtils.reloadMetadata(module);
                     MODULES.add(module);
 
-                    for (IntegrationElement integrationObject : state.getIntegrationObjects()) {
+                    for (IntegrationElement integrationObject : state.getIntegrationElements()) {
                         integrationObject.initialize(module);
                         loadElementsByModule(module, integrationObject);
                     }

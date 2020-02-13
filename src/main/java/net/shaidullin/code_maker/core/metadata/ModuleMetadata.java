@@ -1,5 +1,8 @@
 package net.shaidullin.code_maker.core.metadata;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import net.shaidullin.code_maker.core.node.ModuleNode;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,5 +37,11 @@ public class ModuleMetadata extends AbstractMetadata {
 
     public void setFqnPackage(String fqnPackage) {
         this.fqnPackage = fqnPackage;
+    }
+
+
+    @JsonIgnore
+    public boolean isModuleAllowed(ModuleNode other) {
+        return usedModules.contains(other.getSystemName()) || other.getSystemName().equals(this.systemName);
     }
 }

@@ -1,4 +1,4 @@
-package net.shaidullin.code_maker.core.node.validate;
+package net.shaidullin.code_maker.ui.validator;
 
 import java.util.ArrayList;
 import java.util.List;

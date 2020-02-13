@@ -1,5 +1,6 @@
 package net.shaidullin.code_maker.core.metadata;
 
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -41,5 +42,20 @@ public abstract class AbstractMetadata implements Metadata {
     @Override
     public void setUuid(UUID uuid) {
         this.uuid = uuid;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AbstractMetadata)) return false;
+        AbstractMetadata that = (AbstractMetadata) o;
+        return Objects.equals(uuid, that.uuid) &&
+            Objects.equals(systemName, that.systemName) &&
+            Objects.equals(description, that.description);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(uuid, systemName, description);
     }
 }

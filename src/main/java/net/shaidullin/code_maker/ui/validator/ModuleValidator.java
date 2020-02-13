@@ -1,7 +1,6 @@
-package net.shaidullin.code_maker.core.node.validate;
+package net.shaidullin.code_maker.ui.validator;
 
 import net.shaidullin.code_maker.core.node.ModuleNode;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
 public class ModuleValidator extends AbstractValidator {

@@ -4,12 +4,9 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * Мета данные полей
+ * Мета данные полей классов
  */
 public class FieldMetadata extends AbstractMetadata {
-    protected UUID uuid;
-    protected String systemName;
-    protected String description;
     protected UUID typeUID;
     protected boolean list;
     protected boolean nullable;
@@ -18,36 +15,6 @@ public class FieldMetadata extends AbstractMetadata {
     protected UUID genericParameterUID;
 
     public FieldMetadata() {
-    }
-
-    @Override
-    public UUID getUuid() {
-        return uuid;
-    }
-
-    @Override
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
-    }
-
-    @Override
-    public String getSystemName() {
-        return systemName;
-    }
-
-    @Override
-    public void setSystemName(String systemName) {
-        this.systemName = systemName;
-    }
-
-    @Override
-    public String getDescription() {
-        return description;
-    }
-
-    @Override
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public boolean isList() {
@@ -101,14 +68,12 @@ public class FieldMetadata extends AbstractMetadata {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof FieldMetadata)) return false;
+        if (!super.equals(o)) return false;
         FieldMetadata that = (FieldMetadata) o;
         return list == that.list &&
             nullable == that.nullable &&
             generic == that.generic &&
-            Objects.equals(uuid, that.uuid) &&
-            Objects.equals(systemName, that.systemName) &&
-            Objects.equals(description, that.description) &&
             Objects.equals(typeUID, that.typeUID) &&
             Objects.equals(genericAlias, that.genericAlias) &&
             Objects.equals(genericParameterUID, that.genericParameterUID);
@@ -116,6 +81,6 @@ public class FieldMetadata extends AbstractMetadata {
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid, systemName, description, typeUID, list, nullable, generic, genericAlias, genericParameterUID);
+        return Objects.hash(super.hashCode(), typeUID, list, nullable, generic, genericAlias, genericParameterUID);
     }
 }

@@ -71,6 +71,18 @@ public class FileUtils {
     /**
      * Create a folder if it was not created
      *
+     * @param rootNode
+     * @param directory
+     * @return true if folder created or exists
+     */
+    public static boolean createFolder(Node rootNode, String directory) {
+        String path = FileUtils.buildPathToMetadata(rootNode);
+        return createFolder(path, directory);
+    }
+
+    /**
+     * Create a folder if it was not created
+     *
      * @param path
      * @param directory
      * @return true if folder created or exists
