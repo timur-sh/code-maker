@@ -8,6 +8,7 @@ import net.shaidullin.code_maker.core.node.ModuleNode;
 import net.shaidullin.code_maker.core.node.PackageNode;
 import net.shaidullin.code_maker.integration.IntegrationElement;
 import net.shaidullin.code_maker.integration.IoUtils;
+import net.shaidullin.code_maker.ui.resolver.NameResolverManager;
 import net.shaidullin.code_maker.utils.FileUtils;
 import net.shaidullin.code_maker.utils.NodeUtils;
 
@@ -36,6 +37,8 @@ public class ConfigurationManager {
     public void performConfiguration(ApplicationState state) {
         lock.lock();
         try {
+            NameResolverManager resolverManager = NameResolverManager.getInstance();
+
             if (state.getUsedLeaf() != null) {
                 reloadClass(state.getUsedLeaf());
 
@@ -53,7 +56,7 @@ public class ConfigurationManager {
                     MODULES.add(module);
 
                     for (IntegrationElement integrationObject : state.getIntegrationElements()) {
-                        integrationObject.initialize(module);
+                        integrationObject.initialize(module, resolverManager);
                         loadElementsByModule(module, integrationObject);
                     }
                 }

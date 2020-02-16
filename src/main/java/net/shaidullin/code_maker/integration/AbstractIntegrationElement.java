@@ -1,17 +1,14 @@
 package net.shaidullin.code_maker.integration;
 
 import net.shaidullin.code_maker.core.metadata.ElementMetadata;
-import net.shaidullin.code_maker.core.metadata.LeafMetadata;
 import net.shaidullin.code_maker.core.metadata.MetadataSettings;
 import net.shaidullin.code_maker.core.node.ElementNode;
 import net.shaidullin.code_maker.core.node.LeafNode;
 import net.shaidullin.code_maker.core.node.ModuleNode;
 import net.shaidullin.code_maker.core.node.PackageNode;
-import net.shaidullin.code_maker.core.type.FieldTypeUtils;
-import net.shaidullin.code_maker.core.type.MetadataFieldType;
+import net.shaidullin.code_maker.ui.resolver.NameResolverManager;
 import net.shaidullin.code_maker.utils.FileUtils;
 import net.shaidullin.code_maker.utils.NodeUtils;
-import net.shaidullin.code_maker.utils.PackageUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -19,10 +16,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
 
-public abstract class AbstractIntegrationObject<N extends PackageNode, M extends LeafMetadata>
-    implements IntegrationElement<N, M> {
+public abstract class AbstractIntegrationElement<N extends LeafNode> implements IntegrationElement<N> {
     @Override
-    public final void initialize(ModuleNode moduleNode) {
+    public void initialize(ModuleNode moduleNode, NameResolverManager resolverManager) {
         // create folders of integration objects
         String path = StringUtils.join(
             Arrays.asList(FileUtils.buildPathToMetadata(moduleNode), this.getFolder()),
@@ -44,8 +40,8 @@ public abstract class AbstractIntegrationObject<N extends PackageNode, M extends
     }
 
     @Override
-    public List<LeafNode<N, M>> getLeaves(PackageNode packageNode) {
-        List<LeafNode<N, M>> leafNodes = new ArrayList<>();
+    public List<N> getLeaves(PackageNode packageNode) {
+        List<N> leafNodes = new ArrayList<>();
 
         String pathToMetadata = FileUtils.buildPathToMetadata(packageNode);
         for (String fileName : FileUtils.getFiles(pathToMetadata)) {
@@ -56,7 +52,7 @@ public abstract class AbstractIntegrationObject<N extends PackageNode, M extends
             String systemName = FileUtils.getFileName(fileName);
             File leafFile = new File(pathToMetadata, fileName);
             try (FileInputStream inputStream = new FileInputStream(leafFile)) {
-                LeafNode<N, M> node = this.buildLeaf(systemName, inputStream, packageNode);
+                N node = this.buildLeaf(systemName, inputStream, packageNode);
                 leafNodes.add(node);
 
             } catch (IOException e) {
@@ -65,15 +61,5 @@ public abstract class AbstractIntegrationObject<N extends PackageNode, M extends
         }
 
         return leafNodes;
-    }
-
-    @Override
-    public MetadataFieldType<LeafMetadata> buildFieldType(LeafNode node) {
-        Objects.requireNonNull(node.getMetadata());
-        String fqnName = PackageUtils.assembleFqnClassName(node);
-
-        return FieldTypeUtils.buildMetadataFieldType(node.getMetadata().getUuid(),
-            node.getMetadata().getSystemName(), false, true,
-            fqnName, node.getMetadata());
     }
 }

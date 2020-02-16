@@ -1,20 +1,15 @@
 package net.shaidullin.code_maker.integration.impl.dto.metadata;
 
-import net.shaidullin.code_maker.core.metadata.AbstractMetadata;
+import net.shaidullin.code_maker.core.metadata.AbstractGenericMetadata;
 import net.shaidullin.code_maker.core.metadata.FieldMetadata;
 import net.shaidullin.code_maker.core.metadata.LeafMetadata;
 
-import java.util.Comparator;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.UUID;
+import java.util.*;
 
-public class DtoMetadata extends AbstractMetadata implements LeafMetadata {
+public class DtoMetadata extends AbstractGenericMetadata implements LeafMetadata {
     private UUID parentUID;
     private boolean cacheable;
     private UUID cacheKeyTypeUID;
-    private boolean generic;
-    private String genericAlias;
     private Set<FieldMetadata> fields = new TreeSet<>(Comparator.comparing(FieldMetadata::getSystemName));
 
     public DtoMetadata() {
@@ -45,27 +40,28 @@ public class DtoMetadata extends AbstractMetadata implements LeafMetadata {
         this.cacheable = cachable;
     }
 
-    public boolean isGeneric() {
-        return generic;
-    }
-
-    public void setGeneric(boolean generic) {
-        this.generic = generic;
-    }
-
-    public String getGenericAlias() {
-        return genericAlias;
-    }
-
-    public void setGenericAlias(String genericAlias) {
-        this.genericAlias = genericAlias;
-    }
-
     public UUID getCacheKeyTypeUID() {
         return cacheKeyTypeUID;
     }
 
     public void setCacheKeyTypeUID(UUID cacheKeyTypeUID) {
         this.cacheKeyTypeUID = cacheKeyTypeUID;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DtoMetadata)) return false;
+        if (!super.equals(o)) return false;
+        DtoMetadata metadata = (DtoMetadata) o;
+        return cacheable == metadata.cacheable &&
+            Objects.equals(parentUID, metadata.parentUID) &&
+            Objects.equals(cacheKeyTypeUID, metadata.cacheKeyTypeUID) &&
+            Objects.equals(fields, metadata.fields);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), parentUID, cacheable, cacheKeyTypeUID, fields);
     }
 }

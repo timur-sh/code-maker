@@ -2,7 +2,7 @@ package net.shaidullin.code_maker.core.type;
 
 import java.util.UUID;
 
-public interface FieldType {
+public interface Type {
 
     /**
      * @return UUID of type

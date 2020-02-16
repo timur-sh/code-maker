@@ -2,6 +2,7 @@ package net.shaidullin.code_maker.core.node;
 
 import net.shaidullin.code_maker.core.metadata.ElementMetadata;
 import net.shaidullin.code_maker.integration.IntegrationElement;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -52,6 +53,12 @@ public class ElementNode implements IeNode<ModuleNode, ElementMetadata> {
     @Override
     public void setMetadata(ElementMetadata metadata) {
         this.metadata = metadata;
+    }
+
+    @Nullable
+    @Override
+    public String getIconPath() {
+        return null;
     }
 
     @Override

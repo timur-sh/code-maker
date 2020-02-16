@@ -4,9 +4,11 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import net.shaidullin.code_maker.core.config.ApplicationState;
 import net.shaidullin.code_maker.core.node.ElementNode;
+import net.shaidullin.code_maker.core.node.PackageNode;
 import net.shaidullin.code_maker.ui.toolwindow.utils.ToolWindowUtils;
 import net.shaidullin.code_maker.ui.validator.PackageValidator;
 import net.shaidullin.code_maker.utils.FileUtils;
+import net.shaidullin.code_maker.utils.NodeUtils;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -14,12 +16,12 @@ import javax.swing.tree.TreePath;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class CreatePackageListener implements ActionListener {
+public class AddPackageListener implements ActionListener {
     private final ApplicationState state;
     private final JTree tree;
     private final Project project;
 
-    public CreatePackageListener(ApplicationState state, JTree tree, Project project) {
+    public AddPackageListener(ApplicationState state, JTree tree, Project project) {
         this.state = state;
         this.tree = tree;
         this.project = project;
@@ -44,14 +46,14 @@ public class CreatePackageListener implements ActionListener {
                 return;
             }
 
-            boolean create = FileUtils.createFolder(elementNode, packageName);
-
-            if (!create) {
+            PackageNode packageNode = NodeUtils.addPackage(elementNode, packageName);
+            if (packageNode == null) {
                 Messages.showWarningDialog(project, String.format(
                     "Cannot add folder '%s' for element '%s'",
                     packageName,
                     elementNode.getSystemName()
                 ), "Error");
+
             } else {
                 ToolWindowUtils.refresh(project);
             }

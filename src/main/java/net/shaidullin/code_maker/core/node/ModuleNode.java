@@ -2,6 +2,7 @@ package net.shaidullin.code_maker.core.node;
 
 import com.intellij.util.xmlb.annotations.Transient;
 import net.shaidullin.code_maker.core.metadata.ModuleMetadata;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -46,6 +47,12 @@ public class ModuleNode implements Node<ModuleNode, ModuleMetadata> {
     @Override
     public void setMetadata(ModuleMetadata metadata) {
         this.metadata = metadata;
+    }
+
+    @Nullable
+    @Override
+    public String getIconPath() {
+        return null;
     }
 
     public String getRootMetadataPath() {

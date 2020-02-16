@@ -42,6 +42,6 @@ public class ModuleMetadata extends AbstractMetadata {
 
     @JsonIgnore
     public boolean isModuleAllowed(ModuleNode other) {
-        return usedModules.contains(other.getSystemName()) || other.getSystemName().equals(this.systemName);
+        return usedModules.contains(other.getSystemName()) || other.getMetadata().getSystemName().equals(this.systemName);
     }
 }

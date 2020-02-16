@@ -1,10 +1,8 @@
 package net.shaidullin.code_maker.ui.listener;
 
-
 import com.intellij.openapi.project.Project;
 import net.shaidullin.code_maker.core.config.ApplicationState;
-import net.shaidullin.code_maker.core.node.LeafNode;
-import net.shaidullin.code_maker.core.node.PackageNode;
+import net.shaidullin.code_maker.core.node.FieldNode;
 import net.shaidullin.code_maker.ui.toolwindow.workspace.WorkspacePanel;
 import net.shaidullin.code_maker.ui.toolwindow.workspace.impl.WorkspacePanelBody;
 
@@ -13,18 +11,17 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.UUID;
 
-public class AddLeafListener implements ActionListener {
-    private final Project project;
+public class EditFieldListener implements ActionListener {
     private final JTree tree;
     private final WorkspacePanel workspacePanel;
+    private final Project project;
     private final ApplicationState state;
 
-    public AddLeafListener(Project project, JTree tree, WorkspacePanel workspacePanel, ApplicationState state) {
-        this.project = project;
+    public EditFieldListener(JTree tree, WorkspacePanel workspacePanel, Project project, ApplicationState state) {
         this.tree = tree;
         this.workspacePanel = workspacePanel;
+        this.project = project;
         this.state = state;
     }
 
@@ -33,15 +30,18 @@ public class AddLeafListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         TreePath path = tree.getSelectionPath();
 
-        PackageNode packageNode = (PackageNode) ((DefaultMutableTreeNode) path.getLastPathComponent()).getUserObject();
+        FieldNode fieldNode = (FieldNode) ((DefaultMutableTreeNode) path.getLastPathComponent()).getUserObject();
 
-        LeafNode leafNode = packageNode.getIntegrationElement()
-            .assembleLeafTemplate(UUID.randomUUID(), packageNode);
+        WorkspacePanelBody body = fieldNode.getParent()
+            .getIntegrationElement()
+            .createWorkspacePanelBodyForNestedNode(fieldNode, project, tree, state);
 
-        WorkspacePanelBody body = packageNode.getIntegrationElement()
-            .createWorkspacePanelBody(project, tree, state)
-            .initialize(leafNode);
+        if (body == null) {
+            throw new IllegalStateException(String.format("WorkspacePanelBody for class '%s' not found. Is it registered?",
+                fieldNode.getClass().getSimpleName()));
+        }
 
+        body.initialize(fieldNode);
         workspacePanel.render(body);
     }
 }

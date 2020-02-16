@@ -22,4 +22,6 @@ public interface LeafNode<N extends PackageNode, M extends LeafMetadata> extends
 
     @Override
     void setMetadata(M metadata);
+
+    void removeNestedNode(Node nestedNode);
 }

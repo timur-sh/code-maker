@@ -1,20 +1,46 @@
 package net.shaidullin.code_maker.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import net.shaidullin.code_maker.core.metadata.LeafMetadata;
-import net.shaidullin.code_maker.core.metadata.Metadata;
-import net.shaidullin.code_maker.core.metadata.MetadataSettings;
-import net.shaidullin.code_maker.core.metadata.ModuleMetadata;
-import net.shaidullin.code_maker.core.node.IeNode;
-import net.shaidullin.code_maker.core.node.LeafNode;
-import net.shaidullin.code_maker.core.node.ModuleNode;
-import net.shaidullin.code_maker.core.node.Node;
+import com.intellij.openapi.ui.Messages;
+import net.shaidullin.code_maker.core.metadata.*;
+import net.shaidullin.code_maker.core.node.*;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Objects;
+import java.util.UUID;
 
 public class NodeUtils {
+
+    /**
+     * Assemble package node and its metadata, than persist it
+     *
+     * @param elementNode
+     * @return
+     */
+    @Nullable
+    public static PackageNode addPackage(ElementNode elementNode, String packageName) {
+        PackageMetadata metadata = new PackageMetadata();
+        metadata.setDescription(packageName);
+        metadata.setSystemName(packageName);
+        metadata.setUuid(UUID.randomUUID());
+
+        PackageNode packageNode = new PackageNode();
+        packageNode.setSystemName(metadata.getSystemName());
+        packageNode.setIntegrationElement(Objects.requireNonNull(elementNode.getIntegrationElement()));
+        packageNode.setParent(elementNode);
+        packageNode.setMetadata(metadata);
+
+        boolean create = FileUtils.createFolder(elementNode, packageName);
+        if (create) {
+            NodeUtils.writeMetadata(packageNode, metadata, true);
+            return packageNode;
+        } else {
+            return null;
+        }
+    }
 
     public static void reloadMetadata(ModuleNode node) {
 

@@ -53,7 +53,7 @@ public class NodeTestUtils {
         metadata.setCacheKeyTypeUID(null);
         metadata.setFields(new ArrayListSet<>());
         metadata.setGeneric(false);
-        metadata.setGenericAlias(null);
+        metadata.setTypeParameter(null);
         metadata.setParentUID(null);
         metadata.setDescription(name);
         metadata.setSystemName(name);

@@ -3,6 +3,7 @@ package net.shaidullin.code_maker.core.node;
 import net.shaidullin.code_maker.core.metadata.PackageMetadata;
 import net.shaidullin.code_maker.integration.IntegrationElement;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -59,6 +60,12 @@ public class PackageNode implements IeNode<ElementNode, PackageMetadata>, Compar
     @Override
     public void setMetadata(PackageMetadata metadata) {
         this.metadata = metadata;
+    }
+
+    @Nullable
+    @Override
+    public String getIconPath() {
+        return "/icons/package.png";
     }
 
     @Override

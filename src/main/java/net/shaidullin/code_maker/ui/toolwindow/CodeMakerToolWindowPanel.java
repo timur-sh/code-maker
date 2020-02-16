@@ -10,6 +10,7 @@ import com.intellij.util.ui.JBUI;
 import net.shaidullin.code_maker.core.config.ApplicationState;
 import net.shaidullin.code_maker.core.node.ElementNode;
 import net.shaidullin.code_maker.core.node.ModuleNode;
+import net.shaidullin.code_maker.ui.toolwindow.workspace.WorkspacePanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,8 +28,6 @@ public class CodeMakerToolWindowPanel extends JPanel {
     private WorkspacePanel workspacePanel;
 
 
-    //    private ModuleNode activeModule;
-//    private ElementNode activeElement;
     private final ComboBox<ModuleNode> modulesComboBox = new ComboBox<>();
     private final DefaultComboBoxModel<ModuleNode> modulesModel = new DefaultComboBoxModel<>();
 
@@ -57,12 +56,12 @@ public class CodeMakerToolWindowPanel extends JPanel {
     private JPanel createToolPanel() {
         initializeComboBoxes();
 
-        workspacePanel = new WorkspacePanel(project, state);
-        nodeTreePanel = new NodeTreePanel(state, project, workspacePanel);
+        workspacePanel = new WorkspacePanel();
+        nodeTreePanel = new NodeTreePanel(state);
 
         JSplitPane jSplitPane = new JSplitPane(
             JSplitPane.HORIZONTAL_SPLIT,
-            nodeTreePanel.createPanel((ElementNode) elementComboBox.getSelectedItem()),
+            nodeTreePanel.createPanel((ElementNode) elementComboBox.getSelectedItem(), project, workspacePanel),
             workspacePanel.createPanel()
         );
 
@@ -101,13 +100,11 @@ public class CodeMakerToolWindowPanel extends JPanel {
     }
 
     private void initializeComboBoxes() {
-        state.refreshState();
         modulesComboBox.setModel(modulesModel);
         int preferredHeight = modulesComboBox.getPreferredSize().height;
         modulesComboBox.setPreferredSize(new Dimension(250, preferredHeight));
         modulesComboBox.setMaximumSize(new Dimension(350, preferredHeight));
         modulesComboBox.addActionListener((ActionEvent e) -> {
-//            activeModule = (ModuleNode) ((ComboBox) e.getSource()).getSelectedItem();
             refreshElements((ModuleNode) ((ComboBox) e.getSource()).getSelectedItem());
         });
 
@@ -115,7 +112,6 @@ public class CodeMakerToolWindowPanel extends JPanel {
         elementComboBox.setPreferredSize(new Dimension(250, preferredHeight));
         elementComboBox.setMaximumSize(new Dimension(350, preferredHeight));
         elementComboBox.addActionListener((ActionEvent e) -> {
-//            activeElement = (ElementNode) ((ComboBox) e.getSource()).getSelectedItem();
             if (nodeTreePanel != null) {
                 nodeTreePanel.refresh((ElementNode) ((ComboBox) e.getSource()).getSelectedItem());
             }
@@ -128,6 +124,7 @@ public class CodeMakerToolWindowPanel extends JPanel {
      * Обновиь все модели
      */
     public void refreshAll() {
+        state.refreshState();
         ModuleNode selectedModule = (ModuleNode) modulesComboBox.getSelectedItem();
 
         modulesComboBox.removeAll();

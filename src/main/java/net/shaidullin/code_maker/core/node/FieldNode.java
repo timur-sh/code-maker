@@ -1,14 +1,16 @@
 package net.shaidullin.code_maker.core.node;
 
 import net.shaidullin.code_maker.core.metadata.FieldMetadata;
+import net.shaidullin.code_maker.ui.resolver.NameResolverManager;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-public class FieldNode implements Node<LeafNode, FieldMetadata> {
-    private LeafNode parent;
-    private FieldMetadata metadata;
+public class FieldNode<N extends LeafNode, M extends FieldMetadata> implements Node<N, M> {
+    private N parent;
+    private M metadata;
 
-    public FieldNode(FieldMetadata fieldMetadata, LeafNode parent) {
+    public FieldNode(M fieldMetadata, N parent) {
         this.metadata = fieldMetadata;
         this.parent = parent;
     }
@@ -24,23 +26,29 @@ public class FieldNode implements Node<LeafNode, FieldMetadata> {
     }
 
     @Override
-    public LeafNode getParent() {
+    public N getParent() {
         return this.parent;
     }
 
     @Override
-    public void setParent(LeafNode parent) {
+    public void setParent(N parent) {
         this.parent = parent;
     }
 
     @Override
-    public FieldMetadata getMetadata() {
+    public M getMetadata() {
         return this.metadata;
     }
 
     @Override
-    public void setMetadata(FieldMetadata metadata) {
+    public void setMetadata(M metadata) {
         this.metadata = metadata;
+    }
+
+    @Nullable
+    @Override
+    public String getIconPath() {
+        return "/icons/field.png";
     }
 
     @Override
@@ -55,5 +63,11 @@ public class FieldNode implements Node<LeafNode, FieldMetadata> {
     @Override
     public int hashCode() {
         return Objects.hash(parent, metadata);
+    }
+
+    @Override
+    public String toString() {
+        return NameResolverManager.getInstance()
+            .resolve(NameResolverManager.JAVA, this.getMetadata(), true);
     }
 }

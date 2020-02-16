@@ -5,6 +5,7 @@ import net.shaidullin.code_maker.core.metadata.LeafMetadata;
 import net.shaidullin.code_maker.core.node.ElementNode;
 import net.shaidullin.code_maker.core.node.LeafNode;
 import net.shaidullin.code_maker.core.node.PackageNode;
+import net.shaidullin.code_maker.integration.IntegrationElement;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -42,7 +43,7 @@ public class TypeManager {
     public void reinitializeStorage(ApplicationState state) {
         storage.initializePrimitiveTypes();
 
-        Map<ElementNode, Map<UUID, FieldType>> customTypes = new HashMap<>();
+        Map<ElementNode, Map<UUID, Type>> customTypes = new HashMap<>();
 
         Map<PackageNode, List<LeafNode>> leaves = state.getLeaves();
         for (PackageNode packageNode : leaves.keySet()) {
@@ -52,38 +53,39 @@ public class TypeManager {
                 customTypes.put(elementNode, new HashMap<>());
             }
 
-            Map<UUID, FieldType> fieldTypeMap = customTypes.get(elementNode);
+            Map<UUID, Type> fieldTypeMap = customTypes.get(elementNode);
 
             for (LeafNode leafNode : leaves.get(packageNode)) {
                 LeafMetadata metadata = leafNode.getMetadata();
 
-                fieldTypeMap.put(
-                    metadata.getUuid(),
-                    leafNode.getIntegrationElement().buildFieldType(leafNode)
-                );
+                MetadataType<LeafMetadata> fieldType = leafNode.getIntegrationElement()
+                    .buildFieldType(leafNode);
+                if (fieldType != null) {
+                    fieldTypeMap.put(metadata.getUuid(), fieldType);
+                }
             }
         }
         storage.registerCustomTypes(customTypes);
 
     }
 
-    public FieldType getTypeByUID(UUID uuid) {
+    public Type getTypeByUID(UUID uuid) {
         return storage.getFieldByUID(uuid);
     }
 
-    public Map<UUID, FieldType> getPrimitives() {
+    public Map<UUID, Type> getPrimitives() {
         return storage.getPrimitives();
     }
 
-    public Map<UUID, FieldType> getTypesByElementNode(ElementNode elementNode) {
+    public Map<UUID, Type> getTypesByElementNode(ElementNode elementNode) {
         return storage.getTypesByElementNode(elementNode);
     }
 
-    public List<FieldType> getTypes() {
-        List<FieldType> result = new ArrayList<>(storage.getPrimitives().values());
+    public List<Type> getTypes() {
+        List<Type> result = new ArrayList<>(storage.getPrimitives().values());
         result.addAll(storage.getClassesByModule().values());
         return result.stream()
-            .sorted(Comparator.comparing(FieldType::getName))
+            .sorted(Comparator.comparing(Type::getName))
             .collect(Collectors.toList());
     }
 }

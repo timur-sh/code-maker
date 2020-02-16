@@ -2,6 +2,7 @@ package net.shaidullin.code_maker.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import net.shaidullin.code_maker.core.config.ApplicationState;
+import net.shaidullin.code_maker.core.node.LeafNode;
 import net.shaidullin.code_maker.core.node.ModuleNode;
 import net.shaidullin.code_maker.core.node.Node;
 import net.shaidullin.code_maker.core.node.PackageNode;
@@ -179,6 +180,14 @@ public class FileUtils {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static String buildLeafFileName(LeafNode node) {
+        String pathToMetadata = buildPathToMetadata(node);
+        pathToMetadata = String.join(".", pathToMetadata, LEAF_METADATA_EXTENSION);
+
+        File newFile = new File(pathToMetadata);
+        return newFile.getPath();
     }
 
     public static String buildLeafFileName(String directory, String fileName) {

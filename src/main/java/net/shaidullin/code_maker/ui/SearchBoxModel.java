@@ -1,6 +1,6 @@
 package net.shaidullin.code_maker.ui;
 
-import net.shaidullin.code_maker.core.type.FieldType;
+import net.shaidullin.code_maker.core.type.Type;
 
 import javax.swing.*;
 import java.awt.event.ItemEvent;
@@ -114,7 +114,7 @@ public class SearchBoxModel<T> extends AbstractListModel implements ComboBoxMode
         comboBox.setSelectedItem(e.getItem());
     }
 
-    public void setEditorItem(FieldType fieldType) {
+    public void setEditorItem(Type fieldType) {
         editor.setItem(fieldType.getName());
     }
 

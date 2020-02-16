@@ -3,14 +3,14 @@ package net.shaidullin.code_maker.core.type;
 import java.util.Objects;
 import java.util.UUID;
 
-public abstract class AbstractFieldType implements FieldType {
+public abstract class AbstractType implements Type {
     private UUID uuid;
     private String name;
     private String fqnName;
     private boolean primitive;
     private boolean requiredImport;
 
-    public AbstractFieldType() {
+    public AbstractType() {
     }
 
     @Override
@@ -66,8 +66,8 @@ public abstract class AbstractFieldType implements FieldType {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AbstractFieldType)) return false;
-        AbstractFieldType fieldType = (AbstractFieldType) o;
+        if (!(o instanceof AbstractType)) return false;
+        AbstractType fieldType = (AbstractType) o;
         return primitive == fieldType.primitive &&
             requiredImport == fieldType.requiredImport &&
             Objects.equals(uuid, fieldType.uuid) &&
@@ -78,5 +78,10 @@ public abstract class AbstractFieldType implements FieldType {
     @Override
     public int hashCode() {
         return Objects.hash(uuid, name, fqnName, primitive, requiredImport);
+    }
+
+    @Override
+    public String toString() {
+        return this.name;
     }
 }

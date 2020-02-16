@@ -33,8 +33,8 @@ public class EditLeafListener implements ActionListener {
         LeafNode leafNode = (LeafNode) ((DefaultMutableTreeNode) path.getLastPathComponent()).getUserObject();
 
         WorkspacePanelBody body = leafNode.getIntegrationElement()
-            .createWorkspacePanelBody(leafNode, project, tree, state)
-            .initialize();
+            .createWorkspacePanelBody(project, tree, state)
+            .initialize(leafNode);
 
         workspacePanel.render(body);
     }
