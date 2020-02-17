@@ -17,10 +17,15 @@ public class MetadataTypeJavaNameResolver implements NameResolver {
      */
     @Override
     public String resolve(Object element, boolean forPrimitive) {
+        return resolve(element, forPrimitive, null);
+    }
+
+    @Override
+    public String resolve(Object element, boolean forPrimitive, String typeArgument) {
         MetadataType type = ((MetadataType) element);
 
         return NameResolverManager.getInstance()
-            .resolve(getSupportLanguage(), type.getMetadata(), forPrimitive);
+            .resolve(getSupportLanguage(), type.getMetadata(), forPrimitive, typeArgument);
     }
 
     @Override

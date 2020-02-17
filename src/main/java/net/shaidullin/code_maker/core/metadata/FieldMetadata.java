@@ -1,5 +1,7 @@
 package net.shaidullin.code_maker.core.metadata;
 
+import net.shaidullin.code_maker.ui.resolver.NameResolverManager;
+
 import java.util.Objects;
 import java.util.UUID;
 
@@ -52,5 +54,11 @@ public class FieldMetadata extends AbstractGenericMetadata {
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), typeUID, list, nullable);
+    }
+
+    @Override
+    public String toString() {
+        return NameResolverManager.getInstance()
+            .resolve(NameResolverManager.PLUGIN_UI, this, true);
     }
 }

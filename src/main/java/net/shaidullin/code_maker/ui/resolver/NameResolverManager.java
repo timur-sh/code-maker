@@ -10,6 +10,7 @@ import java.util.Map;
  */
 public class NameResolverManager {
     public static final String JAVA = "java";
+    public static final String PLUGIN_UI = "plugin-ui";
 
     private static final NameResolverManager instance = new NameResolverManager();
     private final Map<String, NameResolver> resolvers = new HashMap<>();
@@ -32,12 +33,28 @@ public class NameResolverManager {
         return this;
     }
 
+    public String resolveJava(Object element, boolean forPrimitive) {
+        return this.resolve(JAVA, element, forPrimitive);
+    }
+
+
+    public String resolve(String language, Object element, boolean forPrimitive, String typeArgument) {
+        NameResolver resolver = findResolver(language, element);
+
+        return resolver.resolve(element, forPrimitive, typeArgument);
+    }
+
     public String resolve(String language, Object element, boolean forPrimitive) {
-        NameResolver resolver = resolvers.values().stream()
+        NameResolver resolver = findResolver(language, element);
+
+        return resolver.resolve(element, forPrimitive);
+    }
+
+    private NameResolver findResolver(String language, Object element) {
+        return resolvers.values().stream()
+            .filter(r -> language.equals(r.getSupportLanguage()))
             .filter(r -> r.isSupport(element))
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Name resolver not found for class - " + element.getClass().getName()));
-
-        return resolver.resolve(element, forPrimitive);
     }
 }

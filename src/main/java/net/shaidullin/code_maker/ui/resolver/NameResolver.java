@@ -7,5 +7,7 @@ public interface NameResolver {
 
     String resolve(Object element, boolean forPrimitive);
 
+    String resolve(Object element, boolean forPrimitive, String typeArgument);
+
     String getSupportLanguage();
 }

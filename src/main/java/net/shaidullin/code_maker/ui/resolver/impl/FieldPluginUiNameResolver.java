@@ -6,7 +6,7 @@ import net.shaidullin.code_maker.core.type.TypeManager;
 import net.shaidullin.code_maker.ui.resolver.NameResolver;
 import net.shaidullin.code_maker.ui.resolver.NameResolverManager;
 
-public class FieldJavaNameResolver implements NameResolver {
+public class FieldPluginUiNameResolver implements NameResolver {
     @Override
     public String resolve(Object element) {
         return resolve(element, true);
@@ -21,7 +21,9 @@ public class FieldJavaNameResolver implements NameResolver {
     public String resolve(Object element, boolean forPrimitive) {
         FieldMetadata metadata = ((FieldMetadata) element);
 
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder(metadata.getSystemName())
+            .append(": ");
+
         Type type = TypeManager.getInstance()
             .getTypeByUID(metadata.getTypeUID());
 
@@ -40,28 +42,36 @@ public class FieldJavaNameResolver implements NameResolver {
         return sb.toString();
     }
 
+    @Override
+    public String resolve(Object element, boolean forPrimitive, String typeArgument) {
+        throw new UnsupportedOperationException("FieldPluginUiNameResolver#resolve(element, forPrimitive, typeArgument)");
+    }
+
     private String getGenericOrDefaultName(FieldMetadata metadata, Type type, boolean forPrimitive) {
         // for generic metadata build generic name
         if (metadata.isGeneric()) {
-            if (metadata.getTypeArgumentUID() != null) {
-                Type typeArgument = TypeManager.getInstance()
-                    .getTypeByUID(metadata.getTypeArgumentUID());
-
-                return NameResolverManager.getInstance()
-                    .resolve(getSupportLanguage(), typeArgument, forPrimitive);
-            }
-
             return metadata.getTypeParameter();
         }
 
+        if (metadata.getTypeArgumentUID() != null) {
+            Type typeArgument = TypeManager.getInstance()
+                .getTypeByUID(metadata.getTypeArgumentUID());
+
+            String typeArgumentName = NameResolverManager.getInstance()
+                .resolveJava(typeArgument, false);
+
+            return NameResolverManager.getInstance()
+                .resolve(NameResolverManager.JAVA, type, false, typeArgumentName);
+        }
+
         return NameResolverManager.getInstance()
-            .resolve(getSupportLanguage(), type, forPrimitive);
+            .resolveJava(type, forPrimitive);
     }
 
 
     @Override
     public String getSupportLanguage() {
-        return NameResolverManager.JAVA;
+        return NameResolverManager.PLUGIN_UI;
     }
 
     @Override

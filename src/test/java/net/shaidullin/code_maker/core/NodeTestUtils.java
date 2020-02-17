@@ -1,17 +1,13 @@
 package net.shaidullin.code_maker.core;
 
 import com.intellij.util.containers.ArrayListSet;
-import net.shaidullin.code_maker.core.metadata.PackageMetadata;
-import net.shaidullin.code_maker.core.node.ElementNode;
+import net.shaidullin.code_maker.core.metadata.FieldMetadata;
 import net.shaidullin.code_maker.core.node.LeafNode;
 import net.shaidullin.code_maker.core.node.PackageNode;
 import net.shaidullin.code_maker.integration.impl.dto.metadata.DtoMetadata;
 import net.shaidullin.code_maker.integration.impl.dto.node.DtoNode;
-import net.shaidullin.code_maker.utils.FileUtils;
 import net.shaidullin.code_maker.utils.NodeUtils;
 
-import java.io.File;
-import java.util.Objects;
 import java.util.UUID;
 
 public class NodeTestUtils {
@@ -20,44 +16,33 @@ public class NodeTestUtils {
     public static final String AUTHORIZATION_LEAF_NAME = "Authorization";
     public static final String AUTHENTICATION_LEAF_NAME = "Authentication";
 
-    /**
-     * Assemble package node and its metadata, than persist it
-     *
-     * @param elementNode
-     * @return
-     */
-    public static PackageNode addPackage(ElementNode elementNode) {
-        PackageMetadata metadata = new PackageMetadata();
-        metadata.setDescription("Auth package");
-        metadata.setSystemName(AUTH_PACKAGE);
-        metadata.setUuid(UUID.randomUUID());
-
-        PackageNode packageNode = new PackageNode();
-        packageNode.setSystemName(metadata.getSystemName());
-        packageNode.setIntegrationElement(Objects.requireNonNull(elementNode.getIntegrationElement()));
-        packageNode.setParent(elementNode);
-        packageNode.setMetadata(metadata);
-
-        File file = new File(
-            FileUtils.buildPathToMetadata(elementNode),
-            packageNode.getSystemName());
-        file.mkdirs();
-        NodeUtils.writeMetadata(packageNode, metadata, true);
-
-        return packageNode;
+    public static LeafNode addLeaf(String name, PackageNode packageNode) {
+        return addLeaf(name, UUID.randomUUID(), packageNode);
     }
 
-    public static LeafNode addLeaf(String name, PackageNode packageNode) {
+    public static LeafNode addLeaf(String name, UUID uuid, PackageNode packageNode) {
+        return addLeaf(name, uuid, packageNode, false, null, null);
+    }
+
+    public static LeafNode addLeaf(String name, UUID uuid, PackageNode packageNode,
+                                   boolean generic, String typeParameter, UUID typeArgument) {
+        return addLeaf(name, uuid, packageNode, generic, typeParameter, typeArgument, null);
+    }
+
+    public static LeafNode addLeaf(String name, UUID uuid, PackageNode packageNode,
+                                   boolean generic, String typeParameter, UUID typeArgument,
+                                   UUID parentUID) {
         DtoMetadata metadata = new DtoMetadata();
         metadata.setCachable(false);
         metadata.setCacheKeyTypeUID(null);
         metadata.setFields(new ArrayListSet<>());
-        metadata.setGeneric(false);
-        metadata.setTypeParameter(null);
-        metadata.setParentUID(null);
+        metadata.setGeneric(generic);
+        metadata.setTypeParameter(typeParameter);
+        metadata.setTypeArgumentUID(typeArgument);
+        metadata.setParentUID(parentUID);
         metadata.setDescription(name);
         metadata.setSystemName(name);
-        metadata.setUuid(UUID.randomUUID());
+        metadata.setUuid(uuid);
 
         DtoNode dtoNode = new DtoNode();
         dtoNode.setIntegrationElement(packageNode.getIntegrationElement());
@@ -69,4 +54,21 @@ public class NodeTestUtils {
         return dtoNode;
     }
 
+    public static FieldMetadata buildFieldMetadata(String name, UUID typeUID, boolean generic,
+                                                   String typeParameter, UUID typeArgument,
+                                                   boolean list) {
+        FieldMetadata metadata = new FieldMetadata();
+        metadata.setTypeArgumentUID(typeArgument);
+        metadata.setTypeParameter(typeParameter);
+        metadata.setGeneric(generic);
+
+        metadata.setList(list);
+        metadata.setNullable(false);
+        metadata.setTypeUID(typeUID);
+        metadata.setDescription(name);
+        metadata.setSystemName(name);
+        metadata.setUuid(UUID.randomUUID());
+
+        return metadata;
+    }
 }

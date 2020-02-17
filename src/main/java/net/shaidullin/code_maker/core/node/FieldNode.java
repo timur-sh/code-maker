@@ -68,6 +68,6 @@ public class FieldNode<N extends LeafNode, M extends FieldMetadata> implements N
     @Override
     public String toString() {
         return NameResolverManager.getInstance()
-            .resolve(NameResolverManager.JAVA, this.getMetadata(), true);
+            .resolve(NameResolverManager.PLUGIN_UI, this.getMetadata(), true);
     }
 }

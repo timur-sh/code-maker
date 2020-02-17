@@ -17,6 +17,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 import static org.junit.Assert.*;
 
@@ -55,7 +56,9 @@ public interface ModuleTestData {
             .findFirst()
             .orElse(null);
         assertNotNull(dtoElementNode);
-        PackageNode package1 = NodeTestUtils.addPackage(dtoElementNode);
+        PackageNode package1 = NodeUtils.addPackage(dtoElementNode, NodeTestUtils.AUTH_PACKAGE);
+        Objects.requireNonNull(package1);
+
         NodeTestUtils.addLeaf(NodeTestUtils.AUTHENTICATION_LEAF_NAME, package1);
         NodeTestUtils.addLeaf(NodeTestUtils.AUTHORIZATION_LEAF_NAME, package1);
 

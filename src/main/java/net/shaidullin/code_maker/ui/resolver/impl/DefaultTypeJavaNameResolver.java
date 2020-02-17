@@ -47,6 +47,11 @@ public class DefaultTypeJavaNameResolver implements NameResolver {
     }
 
     @Override
+    public String resolve(Object element, boolean forPrimitive, String typeArgument) {
+        throw new UnsupportedOperationException("DefaultTypeJavaNameResolver#resolve(element, forPrimitive, typeArgument)");
+    }
+
+    @Override
     public String getSupportLanguage() {
         return NameResolverManager.JAVA;
     }

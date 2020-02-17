@@ -3,6 +3,7 @@ package net.shaidullin.code_maker.integration.impl.dto.ui;
 import net.shaidullin.code_maker.integration.impl.dto.metadata.DtoMetadata;
 import net.shaidullin.code_maker.ui.resolver.NameResolver;
 import net.shaidullin.code_maker.ui.resolver.NameResolverManager;
+import org.apache.commons.lang3.StringUtils;
 
 public class DtoJavaNameResolver implements NameResolver {
     @Override
@@ -17,12 +18,21 @@ public class DtoJavaNameResolver implements NameResolver {
      */
     @Override
     public String resolve(Object element, boolean forPrimitive) {
+        return resolve(element, forPrimitive, null);
+    }
+
+    @Override
+    public String resolve(Object element, boolean forPrimitive, String typeArgument) {
         DtoMetadata metadata = ((DtoMetadata) element);
 
         if (metadata.isGeneric()) {
+            String genericContent = StringUtils.isBlank(typeArgument)
+                ? metadata.getTypeParameter()
+                : typeArgument;
+
             return new StringBuilder().append(metadata.getSystemName())
                 .append("<")
-                .append(metadata.getTypeParameter())
+                .append(genericContent)
                 .append(">")
                 .toString();
 
