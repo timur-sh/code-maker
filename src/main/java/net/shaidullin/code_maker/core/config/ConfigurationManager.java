@@ -108,7 +108,7 @@ public class ConfigurationManager {
         }
 
         ElementNode elementNode = IoUtils.assembleElementNode(integrationObject, module);
-        elementNode.setMetadata(NodeUtils.readMetadata(elementNode, ElementMetadata.class));
+        integrationObject.assembleElementNode(elementNode);
         loadPackagesByElement(elementNode, integrationObject);
 
         ELEMENTS.get(module).add(elementNode);

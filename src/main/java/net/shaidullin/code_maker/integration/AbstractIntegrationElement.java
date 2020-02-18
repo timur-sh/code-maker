@@ -1,5 +1,6 @@
 package net.shaidullin.code_maker.integration;
 
+import net.shaidullin.code_maker.core.config.ApplicationState;
 import net.shaidullin.code_maker.core.metadata.ElementMetadata;
 import net.shaidullin.code_maker.core.metadata.MetadataSettings;
 import net.shaidullin.code_maker.core.node.ElementNode;
@@ -33,9 +34,7 @@ public abstract class AbstractIntegrationElement<N extends LeafNode> implements 
         }
 
         ElementNode elementNode = IoUtils.assembleElementNode(this, moduleNode);
-        ElementMetadata metadata = new ElementMetadata();
-        metadata.setUuid(UUID.randomUUID());
-        metadata.setSystemName(elementNode.getSystemName());
+        ElementMetadata metadata = this.buildElementMetadata(elementNode);
         NodeUtils.writeMetadata(elementNode, metadata, false);
     }
 
@@ -61,5 +60,22 @@ public abstract class AbstractIntegrationElement<N extends LeafNode> implements 
         }
 
         return leafNodes;
+    }
+
+    @Override
+    public boolean generate(PackageNode packageNode, ApplicationState state) {
+
+        List<LeafNode> leafNodes = state.getLeaves().get(packageNode);
+        if (leafNodes.isEmpty()) {
+            return false;
+        }
+
+        String pathToGeneratedData = FileUtils.buildPathToGeneratedData(state, packageNode);
+
+        if (!FileUtils.createFolder(pathToGeneratedData)) {
+            return false;
+        }
+
+        return true;
     }
 }

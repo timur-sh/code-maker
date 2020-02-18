@@ -3,11 +3,9 @@ package net.shaidullin.code_maker.integration;
 import com.intellij.openapi.project.Project;
 import net.shaidullin.code_maker.core.config.ApplicationState;
 import net.shaidullin.code_maker.core.metadata.LeafMetadata;
-import net.shaidullin.code_maker.core.node.LeafNode;
-import net.shaidullin.code_maker.core.node.ModuleNode;
-import net.shaidullin.code_maker.core.node.Node;
-import net.shaidullin.code_maker.core.node.PackageNode;
+import net.shaidullin.code_maker.core.node.*;
 import net.shaidullin.code_maker.core.type.MetadataType;
+import net.shaidullin.code_maker.integration.impl.dto.node.DtoElementMetadata;
 import net.shaidullin.code_maker.ui.resolver.NameResolverManager;
 import net.shaidullin.code_maker.ui.toolwindow.tree.NodeTreeMenu;
 import net.shaidullin.code_maker.ui.toolwindow.workspace.impl.WorkspacePanelBody;
@@ -45,8 +43,10 @@ public interface IntegrationElement<N extends LeafNode> {
 
     /**
      * Generate code and store it
+     *
+     * @return true if generation success
      */
-    void generate(PackageNode packageNode);
+    boolean generate(PackageNode packageNode, ApplicationState state);
 
     /**
      * Initialize integration object when it runs the first time
@@ -73,6 +73,11 @@ public interface IntegrationElement<N extends LeafNode> {
      * @return
      */
     N buildLeaf(String systemName, FileInputStream inputStream, PackageNode packageNode);
+
+
+    DtoElementMetadata buildElementMetadata(ElementNode elementNode);
+
+    ElementNode assembleElementNode(ElementNode elementNode);
 
     /**
      * Create a new LeafNode object

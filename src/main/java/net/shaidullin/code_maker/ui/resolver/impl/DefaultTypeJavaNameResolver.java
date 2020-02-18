@@ -4,6 +4,7 @@ import net.shaidullin.code_maker.core.type.DefaultTypeImpl;
 import net.shaidullin.code_maker.core.type.MetadataType;
 import net.shaidullin.code_maker.ui.resolver.NameResolver;
 import net.shaidullin.code_maker.ui.resolver.NameResolverManager;
+import net.shaidullin.code_maker.utils.PackageUtils;
 
 import java.util.Map;
 
@@ -34,8 +35,7 @@ public class DefaultTypeJavaNameResolver implements NameResolver {
             }
 
         } else {
-            String[] fqn = type.getFqnName().split("\\.");
-            systemName = fqn[fqn.length - 1];
+            systemName = PackageUtils.getLastPart(type.getFqnName());
         }
 
         sb.append(systemName);

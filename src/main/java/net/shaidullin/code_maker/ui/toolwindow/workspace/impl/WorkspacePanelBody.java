@@ -47,6 +47,10 @@ public abstract class WorkspacePanelBody<N extends Node> extends JPanel {
 
     public abstract WorkspacePanelBody initialize(N node);
 
+    /**
+     * @param node
+     * @return This method used by reflection {@link net.shaidullin.code_maker.utils.ReflectionUtils#getNodeSupportedByWBP}
+     */
     public abstract boolean isInProcess(N node);
 
     protected void renderToolbar(GridBagConstraints constraints) {

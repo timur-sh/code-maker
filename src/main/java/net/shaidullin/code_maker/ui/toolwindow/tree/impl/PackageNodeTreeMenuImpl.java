@@ -51,7 +51,7 @@ public class PackageNodeTreeMenuImpl extends AbstractNodeTreeMenuImpl<PackageNod
         popupMenu.addSeparator();
 
         JMenuItem removePackage = new JMenuItem("Remove package");
-        removePackage.addActionListener(new RemovePackageListener(tree, project));
+        removePackage.addActionListener(new RemovePackageListener(tree, project, state, workspacePanel));
         popupMenu.add(removePackage);
         popupMenu.addSeparator();
 

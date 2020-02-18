@@ -35,7 +35,7 @@ public abstract class AbstractFieldWBPImpl<T extends FieldNode> extends Workspac
         model.addElements(fieldTypeList);
         typeJComboBox.setModel(model);
         typeJComboBox.addItemListener(item -> {
-            if (item.getStateChange() == ItemEvent.SELECTED) {
+            if (item.getStateChange() == ItemEvent.SELECTED && typeJComboBox.getSelectedItem() instanceof Type) {
                 Type selectedItem = (Type) typeJComboBox.getSelectedItem();
                 typeArgumentCompoBox.setEnabled(selectedItem != null && TypeUtils.isGeneric(selectedItem.getUuid(), state));
             }

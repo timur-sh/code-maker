@@ -9,6 +9,7 @@ import net.shaidullin.code_maker.ui.toolwindow.utils.ToolWindowUtils;
 import net.shaidullin.code_maker.ui.validator.PackageValidator;
 import net.shaidullin.code_maker.utils.FileUtils;
 import net.shaidullin.code_maker.utils.NodeUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -35,6 +36,10 @@ public class AddPackageListener implements ActionListener {
 
         if (elementNode != null) {
             String packageName = JOptionPane.showInputDialog("Input package name");
+            if (StringUtils.isBlank(packageName)) {
+                return;
+            }
+
             state.refreshState();
 
             PackageValidator packageValidator = new PackageValidator(state.getPackages().get(elementNode));

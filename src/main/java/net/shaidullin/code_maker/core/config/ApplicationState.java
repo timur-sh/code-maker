@@ -15,6 +15,7 @@ import net.shaidullin.code_maker.integration.IntegrationElementRegistry;
 import net.shaidullin.code_maker.integration.impl.dto.DtoIntegrationElement;
 import net.shaidullin.code_maker.ui.resolver.NameResolverManager;
 import net.shaidullin.code_maker.ui.resolver.impl.DefaultTypeJavaNameResolver;
+import net.shaidullin.code_maker.ui.resolver.impl.FieldJavaNameResolver;
 import net.shaidullin.code_maker.ui.resolver.impl.FieldPluginUiNameResolver;
 import net.shaidullin.code_maker.ui.resolver.impl.MetadataTypeJavaNameResolver;
 import org.jetbrains.annotations.NotNull;
@@ -50,6 +51,7 @@ public class ApplicationState implements PersistentStateComponent<CMState> {
         NameResolverManager.getInstance()
             .register(new DefaultTypeJavaNameResolver())
             .register(new MetadataTypeJavaNameResolver())
+            .register(new FieldJavaNameResolver())
             .register(new FieldPluginUiNameResolver());
     }
 

@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class FileUtils {
+    public static final String JAVA_EXTENSION = "java";
     public static final String LEAF_METADATA_EXTENSION = "json";
     public static final String SEPARATOR = File.separator;
 
@@ -90,11 +91,22 @@ public class FileUtils {
      */
     public static boolean createFolder(String path, String directory) {
         File newDirectory = new File(path, directory);
+        return createFolder(newDirectory.getAbsolutePath());
+    }
+
+    /**
+     * Create a folder if it was not created
+     *
+     * @param path
+     * @return true if folder created or exists
+     */
+    public static boolean createFolder(String path) {
+        File newDirectory = new File(path);
         if (newDirectory.exists()) {
             return true;
         }
 
-        return newDirectory.mkdir();
+        return newDirectory.mkdirs();
     }
 
     private static List<String> assemblePathsToNode(Node node) {

@@ -29,4 +29,14 @@ public class PackageUtils {
         Collections.reverse(parts);
         return String.join(".", parts);
     }
+
+    public static String getLastPart(String name) {
+        String[] fqn = name.split("\\.");
+
+        if (fqn.length == 0) {
+            return null;
+        }
+
+        return fqn[fqn.length - 1];
+    }
 }

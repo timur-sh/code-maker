@@ -28,13 +28,9 @@ public class GeneratorListener implements ActionListener {
         PackageNode packageNode = (PackageNode) ((DefaultMutableTreeNode) path.getLastPathComponent()).getUserObject();
         state.refreshState();
 
-//        List<ClassNode> classNodes = configuration.getClasses().get(packageNode);
-//        if (classNodes.isEmpty()) {
-//            return;
-//        }
-//        if (!createDirectories(packageNode, configuration)) {
-//            return;
-//        }
+        boolean result = packageNode.getIntegrationElement()
+            .generate(packageNode, state);
+
 //
 //        switch (packageNode.getClassifierEnum()) {
 //            case ENTITY:
@@ -52,9 +48,17 @@ public class GeneratorListener implements ActionListener {
 //                throw new RuntimeException("Unsupported classifier = " + packageNode.getClassifierEnum().getCode());
 //        }
 
-        Messages.showInfoMessage(String.format(
-            "Generation completed for '%s' package", packageNode.getSystemName()
-        ), "Generation");
+        if (result) {
+            Messages.showInfoMessage(String.format(
+                "Generation completed for '%s' package", packageNode.getSystemName()
+            ), "Generation");
+
+        } else {
+            Messages.showInfoMessage(String.format(
+                "Generation is not completed for '%s' package", packageNode.getSystemName()
+            ), "Generation");
+
+        }
     }
 //
 //    private void generateService(PackageNode packageNode, List<ClassNode> classNodes, ApplicationConfiguration configuration) {
@@ -104,7 +108,7 @@ public class GeneratorListener implements ActionListener {
 //
 //            Map<String, Object> root = new HashMap<>();
 //            root.put(GeneratorService.MODEL, model);
-//            root.put(GeneratorService.IMPORTING_PACKAGES, importingPackages.stream().distinct().collect(Collectors.toList()));
+//            root.put(GeneratorService.IMPORTED_PACKAGES, importingPackages.stream().distinct().collect(Collectors.toList()));
 //            root.put(GeneratorService.PACKAGE, mainPackage);
 //
 //            Map<String, String> generatedResults = generator.renderService(classNode.getSystemName(), root, packagesForImplementations);
@@ -333,7 +337,7 @@ public class GeneratorListener implements ActionListener {
 //
 //        Map<String, Object> root = new HashMap<>();
 //        root.put(GeneratorService.MODEL, auditModel);
-//        root.put(GeneratorService.IMPORTING_PACKAGES, importingPackages.stream().distinct().collect(Collectors.toList()));
+//        root.put(GeneratorService.IMPORTED_PACKAGES, importingPackages.stream().distinct().collect(Collectors.toList()));
 //        root.put(GeneratorService.PACKAGE, auditPackage);
 //
 //        String generatedCode = generator.renderAuditFactory(root);
@@ -360,66 +364,7 @@ public class GeneratorListener implements ActionListener {
 //        }
 //        return auditModel.getOperations();
 //    }
-//
-//    private void generateDomain(PackageNode packageNode, List<ClassNode> classNodes, ApplicationConfiguration configuration) {
-//        String generationPath = buildPathForDirectory(packageNode, configuration);
-//        String mainPackage = buildPackageName(packageNode);
-//
-//        String domainInterface = packageNode.getParent().getParent().getDomainInterface();
-//        String cacheInterface = packageNode.getParent().getParent().getCacheInterface();
-//
-//
-//        for (ClassNode classNode : classNodes) {
-//            List<String> importingPackages = new ArrayList<>();
-//
-//
-//            DomainMetadata metadata = ((DomainMetadata) classNode.getMetadata());
-//            DomainModel model = new DomainModel();
-//            model.setSystemName(metadata.getSystemName());
-//            model.setSignatureClassName(metadata.getSignatureClassName());
-//
-//            if (metadata.getParentUID() != null) {
-//                ClassNode parentClassNode = configuration.getClassByUID(metadata.getParentUID());
-//                if (!parentClassNode.equals(UNDEFINED_CLASS)) {
-//                    String parentPackageName = buildPackageName(parentClassNode.getParent(), parentClassNode);
-//                    importingPackages.add(parentPackageName);
-//                    model.setParent(parentClassNode.getMetadata().getSystemName());
-//                }
-//
-//            } else if (StringUtils.isNoneEmpty(domainInterface) && !metadata.isCachable()) {
-//                String parentInterface = BavlexStringUtils.getLastPartOfClassName(domainInterface);
-//                model.getInterfaces().add(parentInterface);
-//                importingPackages.add(domainInterface);
-//            }
-//
-//            if (metadata.isCachable() && StringUtils.isNoneEmpty(cacheInterface)) {
-//                String cachableInterfaceName = BavlexStringUtils.getLastPartOfClassName(cacheInterface);
-//                model.getInterfaces().add(cachableInterfaceName);
-//                importingPackages.add(cacheInterface);
-//
-//            }
-//
-//            importingPackages.addAll(metadata.getImportingPackages());
-//            importingPackages = importingPackages.stream().distinct().collect(Collectors.toList());
-//
-//            model.setFields(metadata.getFields());
-//
-//            Map<String, Object> root = new HashMap<>();
-//            root.put(GeneratorService.MODEL, model);
-//            root.put(GeneratorService.IMPORTING_PACKAGES, importingPackages);
-//            root.put(GeneratorService.PACKAGE, mainPackage);
-//
-//            String generationCode = generator.renderDomain(root);
-//            FileHelper.saveContent(
-//                FileHelper.buildAbsoluteFileName(generationPath, classNode.getSystemName(), "java"),
-//                generationCode
-//            );
-//
-//            if (metadata.isCachable()) {
-//                generateCache(metadata, configuration);
-//            }
-//        }
-//    }
+
 //
 //    private void generateCache(DomainMetadata domainMetadata, ApplicationConfiguration configuration) {
 //        List<String> importingPackages = new ArrayList<>();
@@ -449,7 +394,7 @@ public class GeneratorListener implements ActionListener {
 //
 //        Map<String, Object> root = new HashMap<>();
 //        root.put(GeneratorService.MODEL, cacheModel);
-//        root.put(GeneratorService.IMPORTING_PACKAGES, importingPackages);
+//        root.put(GeneratorService.IMPORTED_PACKAGES, importingPackages);
 //        root.put(GeneratorService.PACKAGE, mainPackage);
 //
 //        String generationCode = generator.renderCache(root);
@@ -496,7 +441,7 @@ public class GeneratorListener implements ActionListener {
 //
 //            Map<String, Object> root = new HashMap<>();
 //            root.put(GeneratorService.MODEL, model);
-//            root.put(GeneratorService.IMPORTING_PACKAGES, importingPackages);
+//            root.put(GeneratorService.IMPORTED_PACKAGES, importingPackages);
 //            root.put(GeneratorService.PACKAGE, mainPackage);
 //
 //            String generationCode = generator.renderEntity(root);
@@ -537,72 +482,5 @@ public class GeneratorListener implements ActionListener {
 //            generationCode
 //        );
 //    }
-//
-//    private boolean createDirectories(PackageNode packageNode, ApplicationConfiguration configuration, String nested) {
-//        String pathName = buildPathForDirectory(packageNode, configuration, nested);
-//        return createDirectories(pathName, configuration);
-//    }
-//
-//    private boolean createDirectories(String pathName, ApplicationConfiguration configuration) {
-//        if (configuration.getGeneratePath() == null) {
-//            Messages.showErrorDialog("Generation path not specified", "Error");
-//            return false;
-//        }
-//
-//        Path path = Paths.get(pathName);
-//
-//        try {
-//            Files.createDirectories(path);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        return true;
-//    }
-//
-//    private boolean createDirectories(PackageNode packageNode, ApplicationConfiguration configuration) {
-//        return createDirectories(packageNode, configuration, null);
-//    }
-//
-//    private String buildPathForDirectory(PackageNode packageNode, ApplicationConfiguration configuration, String nested) {
-//        ModuleNode moduleNode = packageNode.getParent().getParent();
-//        String packageName = buildPackageName(packageNode);
-//
-//        return buildPathForDirectory(packageName, moduleNode.getSystemName(), configuration, nested);
-//    }
-//
-//    private String buildPathForDirectory(String packageName, String moduleName, ApplicationConfiguration configuration, String nested) {
-//
-//        String absolutePath = String.format(
-//            "%s%s%s%s%s",
-//            configuration.getGeneratePath(),
-//            File.separator,
-//            BavlexStringUtils.capitalizeFirstLetter(moduleName),
-//            File.separator,
-//            packageName.replace(".", "\\")
-//        );
-//
-//        if (StringUtils.isEmpty(nested)) {
-//            return absolutePath;
-//        }
-//
-//        return String.format(
-//            "%s%s%s",
-//            absolutePath,
-//            File.separator,
-//            nested
-//        );
-//    }
-//
-//    private String buildPathForDirectory(PackageNode packageNode, ApplicationConfiguration configuration) {
-//        return buildPathForDirectory(packageNode, configuration, null);
-//    }
-//
-//    public static String buildPackageName(PackageNode packageNode) {
-//        return String.format("%s.%s.%s", packageNode.getParent().getParent().getPackageName(), packageNode.getSystemName(), packageNode.getParent().getSystemName().toLowerCase());
-//    }
-//
-//    public static String buildPackageName(PackageNode packageNode, ClassNode classNode) {
-//        return String.format("%s.%s", buildPackageName(packageNode), classNode.getSystemName());
-//    }
+
 }

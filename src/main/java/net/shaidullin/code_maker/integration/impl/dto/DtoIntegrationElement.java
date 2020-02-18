@@ -3,18 +3,18 @@ package net.shaidullin.code_maker.integration.impl.dto;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.JBPopupMenu;
 import net.shaidullin.code_maker.core.config.ApplicationState;
+import net.shaidullin.code_maker.core.metadata.ElementMetadata;
 import net.shaidullin.code_maker.core.metadata.FieldMetadata;
 import net.shaidullin.code_maker.core.metadata.LeafMetadata;
-import net.shaidullin.code_maker.core.node.FieldNode;
-import net.shaidullin.code_maker.core.node.ModuleNode;
-import net.shaidullin.code_maker.core.node.Node;
-import net.shaidullin.code_maker.core.node.PackageNode;
+import net.shaidullin.code_maker.core.node.*;
 import net.shaidullin.code_maker.core.node.utils.LeafNodeUtils;
 import net.shaidullin.code_maker.core.type.MetadataType;
 import net.shaidullin.code_maker.core.type.TypeUtils;
 import net.shaidullin.code_maker.integration.AbstractIntegrationElement;
 import net.shaidullin.code_maker.integration.IntegrationElement;
+import net.shaidullin.code_maker.integration.impl.dto.generator.impl.DtoJavaGenerator;
 import net.shaidullin.code_maker.integration.impl.dto.metadata.DtoMetadata;
+import net.shaidullin.code_maker.integration.impl.dto.node.DtoElementMetadata;
 import net.shaidullin.code_maker.integration.impl.dto.node.DtoNode;
 import net.shaidullin.code_maker.integration.impl.dto.ui.DtoFieldWBPImpl;
 import net.shaidullin.code_maker.integration.impl.dto.ui.DtoJavaNameResolver;
@@ -24,6 +24,7 @@ import net.shaidullin.code_maker.ui.resolver.NameResolverManager;
 import net.shaidullin.code_maker.ui.toolwindow.tree.NodeTreeMenu;
 import net.shaidullin.code_maker.ui.toolwindow.workspace.impl.WorkspacePanelBody;
 import net.shaidullin.code_maker.utils.JsonUtils;
+import net.shaidullin.code_maker.utils.NodeUtils;
 import net.shaidullin.code_maker.utils.PackageUtils;
 import org.jetbrains.annotations.Nullable;
 
@@ -56,8 +57,19 @@ public class DtoIntegrationElement extends AbstractIntegrationElement<DtoNode> {
     }
 
     @Override
-    public void generate(PackageNode packageNode) {
-        //todo implement
+    public boolean generate(PackageNode packageNode, ApplicationState state) {
+        if (!super.generate(packageNode, state)) {
+            return false;
+        }
+
+        new DtoJavaGenerator(packageNode, state)
+            .generate()
+            .save();
+
+        // todo generage cache
+//        cachee
+
+        return true;
     }
 
     @Override
@@ -71,6 +83,25 @@ public class DtoIntegrationElement extends AbstractIntegrationElement<DtoNode> {
     public DtoNode buildLeaf(String systemName, FileInputStream inputStream, PackageNode packageNode) {
         DtoMetadata dtoMetadata = JsonUtils.readValue(inputStream, DtoMetadata.class);
         return LeafNodeUtils.buildDtoNode(packageNode, systemName, this, dtoMetadata);
+    }
+
+    @Override
+    public DtoElementMetadata buildElementMetadata(ElementNode elementNode) {
+        DtoElementMetadata metadata = new DtoElementMetadata();
+        metadata.setCacheInterface("net.shaidullin.cache.Cache");
+        metadata.setRootDtoJavaInterface("net.shaidullin.dto.Dto");
+        metadata.setUuid(UUID.randomUUID());
+        metadata.setSystemName(elementNode.getSystemName());
+        metadata.setDescription(elementNode.getSystemName());
+
+        return metadata;
+    }
+
+    @Override
+    public ElementNode assembleElementNode(ElementNode elementNode) {
+        elementNode.setMetadata(NodeUtils.readMetadata(elementNode, DtoElementMetadata.class));
+
+        return elementNode;
     }
 
     @Override
