@@ -2,10 +2,7 @@ package net.shaidullin.code_maker.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import net.shaidullin.code_maker.core.config.ApplicationState;
-import net.shaidullin.code_maker.core.node.LeafNode;
-import net.shaidullin.code_maker.core.node.ModuleNode;
-import net.shaidullin.code_maker.core.node.Node;
-import net.shaidullin.code_maker.core.node.PackageNode;
+import net.shaidullin.code_maker.core.node.*;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -145,10 +142,36 @@ public class FileUtils {
     }
 
     public static String buildPathToGeneratedData(ApplicationState state, Node node) {
-        List<String> parts = assemblePathsToNode(node);
-        if (state.getGeneratePath() != null) {
-            parts.add(state.getGeneratePath());
+        return buildPathToGeneratedData(state, node, false);
+    }
+
+    public static String buildPathToGeneratedData(ApplicationState state, Node node, boolean withoutElement) {
+        List<String> parts = new ArrayList<>();
+
+        if (node instanceof LeafNode) {
+            parts.add(node.getSystemName());
+            node = node.getParent();
         }
+
+        if (node instanceof PackageNode) {
+            ElementNode elementNode = ((PackageNode) node).getParent();
+            if (!withoutElement) {
+                parts.add(elementNode.getSystemName());
+            }
+
+            parts.add(node.getSystemName());
+            node = elementNode.getParent();
+        }
+
+        if (node instanceof ElementNode) {
+            throw new UnsupportedOperationException("Use assembleFqnClassName(PackageNode) instead");
+        }
+
+        if (node instanceof ModuleNode) {
+            parts.add(node.getSystemName());
+        }
+
+        parts.add(state.getGeneratePath());
 
         Collections.reverse(parts);
         String path = StringUtils.join(parts, SEPARATOR);

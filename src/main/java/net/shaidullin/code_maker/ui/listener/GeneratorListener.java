@@ -366,43 +366,6 @@ public class GeneratorListener implements ActionListener {
 //    }
 
 //
-//    private void generateCache(DomainMetadata domainMetadata, ApplicationConfiguration configuration) {
-//        List<String> importingPackages = new ArrayList<>();
-//        PackageNode packageNode = domainMetadata.getPackageNode();
-//        String mainPackage = String.format("%s.%s.cache", packageNode.getParent().getParent().getPackageName(), packageNode.getSystemName());
-//
-//        ModuleNode moduleNode = packageNode.getParent().getParent();
-//        String generationPath = buildPathForDirectory(mainPackage, moduleNode.getSystemName(), configuration, null);
-//
-//        if (!createDirectories(generationPath, configuration)) {
-//            Messages.showWarningDialog("Can't create a directory 'cache'", "Warning");
-//            return;
-//        }
-//
-//        if (!domainMetadata.getCacheKeyType().isPrimitive()) {
-//            importingPackages.add(domainMetadata.getCacheKeyType().getClz());
-//        }
-//
-//
-//        String domainPackage = buildPackageName(packageNode) + "." + domainMetadata.getSystemName();
-//        importingPackages.add(domainPackage);
-//
-//        CacheModel cacheModel = new CacheModel();
-//        cacheModel.setKey(domainMetadata.getCacheKeyType().getSystemName(false));
-//        cacheModel.setValue(domainMetadata.getSystemName());
-//        cacheModel.setSystemName(domainMetadata.getSystemName() + "Cache");
-//
-//        Map<String, Object> root = new HashMap<>();
-//        root.put(GeneratorService.MODEL, cacheModel);
-//        root.put(GeneratorService.IMPORTED_PACKAGES, importingPackages);
-//        root.put(GeneratorService.PACKAGE, mainPackage);
-//
-//        String generationCode = generator.renderCache(root);
-//        FileHelper.saveContent(
-//            FileHelper.buildAbsoluteFileName(generationPath, cacheModel.getSystemName(), "java"),
-//            generationCode
-//        );
-//    }
 //
 //    private void generateEntity(PackageNode packageNode, List<ClassNode> classNodes, ApplicationConfiguration configuration) {
 //        String generationPath = buildPathForDirectory(packageNode, configuration);

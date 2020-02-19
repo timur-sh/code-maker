@@ -12,6 +12,7 @@ import net.shaidullin.code_maker.core.type.MetadataType;
 import net.shaidullin.code_maker.core.type.TypeUtils;
 import net.shaidullin.code_maker.integration.AbstractIntegrationElement;
 import net.shaidullin.code_maker.integration.IntegrationElement;
+import net.shaidullin.code_maker.integration.impl.dto.generator.impl.DtoCacheJavaGenerator;
 import net.shaidullin.code_maker.integration.impl.dto.generator.impl.DtoJavaGenerator;
 import net.shaidullin.code_maker.integration.impl.dto.metadata.DtoMetadata;
 import net.shaidullin.code_maker.integration.impl.dto.node.DtoElementMetadata;
@@ -66,8 +67,9 @@ public class DtoIntegrationElement extends AbstractIntegrationElement<DtoNode> {
             .generate()
             .save();
 
-        // todo generage cache
-//        cachee
+        new DtoCacheJavaGenerator(packageNode, state)
+            .generate()
+            .save();
 
         return true;
     }

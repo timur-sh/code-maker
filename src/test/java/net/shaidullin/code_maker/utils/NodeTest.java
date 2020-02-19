@@ -33,9 +33,10 @@ public class NodeTest {
     public void buildModulePathToMetadataTest() {
         ModuleNode securityNode = ModuleTestData.getSecurityNode();
         String moduleMetadataPath = ModuleTestData.AUTO_CLEAN_PATH.toAbsolutePath().toString();
+        String generationPath = String.join(FileUtils.SEPARATOR, ModuleTestData.autoCleanState.getGeneratePath(), securityNode.getSystemName());
         // test ModuleNode
         assertNotNull("Security node is present", securityNode);
-        this.testNodeInternal(securityNode, "com.security", moduleMetadataPath);
+        this.testNodeInternal(securityNode, "com.news.core", moduleMetadataPath, generationPath);
 
 
         // test ElementNode
@@ -46,7 +47,8 @@ public class NodeTest {
             .orElse(null);
         assertNotNull("Dto node is found", dtoElementNode);
         String dtoMetadataPath = Paths.get(moduleMetadataPath, dtoElementNode.getSystemName()).toString();
-        this.testNodeInternal(dtoElementNode, "com.security.domain", dtoMetadataPath);
+//        generationPath = String.join(FileUtils.SEPARATOR, generationPath, "???");
+//        this.testNodeInternal(dtoElementNode, "com.news.core.security.", dtoMetadataPath);
 
 
         // test PackageNode
@@ -57,7 +59,9 @@ public class NodeTest {
             .orElse(null);
         assertNotNull("Auth package is not null", authPackageNode);
         String authPackagePath = Paths.get(dtoMetadataPath, authPackageNode.getSystemName()).toString();
-        this.testNodeInternal(authPackageNode, "com.security.domain.auth", authPackagePath);
+        generationPath = String.join(FileUtils.SEPARATOR, generationPath, authPackageNode.getSystemName(), authPackageNode.getParent().getSystemName());
+
+        this.testNodeInternal(authPackageNode, "com.news.core.auth.domain", authPackagePath, generationPath);
 
         // test LeafNode
         List<LeafNode> leaves = ModuleTestData.autoCleanState.getLeaves()
@@ -70,20 +74,27 @@ public class NodeTest {
 
         assertNotNull("Node is found", leafNode);
         String authenticationLeaf = Paths.get(authPackagePath, leafNode.getSystemName()).toString();
-        this.testNodeInternal(leafNode, "com.security.domain.auth.Authentication",
-            authenticationLeaf);
+        generationPath = String.join(FileUtils.SEPARATOR, generationPath, leafNode.getSystemName());
+
+        this.testNodeInternal(leafNode, "com.news.core.auth.domain.Authentication",
+            authenticationLeaf, generationPath);
 
 
     }
 
-    public void testNodeInternal(Node node, String expectedPackage, String expectedMetadataPath) {
+    public void testNodeInternal(Node node, String expectedPackage, String expectedMetadataPath, String expectedGenerationPath) {
         System.out.println("-- expected package=" + expectedPackage);
         System.out.println("-- expected metadataPath=" + expectedMetadataPath);
+        System.out.println("-- expected generationPath=" + expectedMetadataPath);
 
         assertEquals(expectedPackage, PackageUtils.assembleFqnClassName(node));
         assertEquals("Build path for node=" + node.getClass().getSimpleName(),
             expectedMetadataPath,
             FileUtils.buildPathToMetadata(node));
+
+        assertEquals("Build path to generation data",
+            expectedGenerationPath,
+            FileUtils.buildPathToGeneratedData(ModuleTestData.autoCleanState, node));
 
         System.out.println();
     }
