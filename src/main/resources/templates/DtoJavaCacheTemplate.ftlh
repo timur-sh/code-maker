@@ -1,7 +1,6 @@
 <#ftl auto_esc=false>
 package ${package};
 
-import net.shaidullin.cache.SimpleCacheStorage;
 import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.config.builders.ExpiryPolicyBuilder;
 import org.ehcache.config.builders.ResourcePoolsBuilder;

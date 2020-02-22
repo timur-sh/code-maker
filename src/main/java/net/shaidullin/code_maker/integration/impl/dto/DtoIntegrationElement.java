@@ -3,7 +3,6 @@ package net.shaidullin.code_maker.integration.impl.dto;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.JBPopupMenu;
 import net.shaidullin.code_maker.core.config.ApplicationState;
-import net.shaidullin.code_maker.core.metadata.ElementMetadata;
 import net.shaidullin.code_maker.core.metadata.FieldMetadata;
 import net.shaidullin.code_maker.core.metadata.LeafMetadata;
 import net.shaidullin.code_maker.core.node.*;
@@ -12,6 +11,7 @@ import net.shaidullin.code_maker.core.type.MetadataType;
 import net.shaidullin.code_maker.core.type.TypeUtils;
 import net.shaidullin.code_maker.integration.AbstractIntegrationElement;
 import net.shaidullin.code_maker.integration.IntegrationElement;
+import net.shaidullin.code_maker.integration.IntegrationElementSettings;
 import net.shaidullin.code_maker.integration.impl.dto.generator.impl.DtoCacheJavaGenerator;
 import net.shaidullin.code_maker.integration.impl.dto.generator.impl.DtoJavaGenerator;
 import net.shaidullin.code_maker.integration.impl.dto.metadata.DtoMetadata;
@@ -90,8 +90,6 @@ public class DtoIntegrationElement extends AbstractIntegrationElement<DtoNode> {
     @Override
     public DtoElementMetadata buildElementMetadata(ElementNode elementNode) {
         DtoElementMetadata metadata = new DtoElementMetadata();
-        metadata.setCacheInterface("net.shaidullin.cache.Cache");
-        metadata.setRootDtoJavaInterface("net.shaidullin.dto.Dto");
         metadata.setUuid(UUID.randomUUID());
         metadata.setSystemName(elementNode.getSystemName());
         metadata.setDescription(elementNode.getSystemName());
@@ -163,6 +161,11 @@ public class DtoIntegrationElement extends AbstractIntegrationElement<DtoNode> {
         for (FieldMetadata field : leafNode.getMetadata().getFields()) {
             treeNode.add(new DefaultMutableTreeNode(new FieldNode<>(field, leafNode)));
         }
+    }
+
+    @Override
+    public IntegrationElementSettings createSettingsPanel(ApplicationState state) {
+        return new DtoElementSettings(state);
     }
 
 }

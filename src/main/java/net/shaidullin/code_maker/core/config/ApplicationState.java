@@ -18,6 +18,7 @@ import net.shaidullin.code_maker.ui.resolver.impl.DefaultTypeJavaNameResolver;
 import net.shaidullin.code_maker.ui.resolver.impl.FieldJavaNameResolver;
 import net.shaidullin.code_maker.ui.resolver.impl.FieldPluginUiNameResolver;
 import net.shaidullin.code_maker.ui.resolver.impl.MetadataTypeJavaNameResolver;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -157,6 +158,21 @@ public class ApplicationState implements PersistentStateComponent<CMState> {
             .flatMap(Collection::stream)
             .filter(c -> c.getMetadata().getUuid().equals(uuid)).findFirst()
             .orElse(LeafNodeUtils.UNDEFINED_CLASS);
+    }
+
+    public String getConfigurationValue(String key) {
+        return this.state.get(key);
+    }
+
+    public String getConfigurationValueOrEmpty(String key) {
+        String value = this.getConfigurationValue(key);
+        return StringUtils.isBlank(value)
+            ? ""
+            : value;
+    }
+
+    public void setConfigurationValue(String key, String value) {
+        this.state.put(key, value);
     }
 
 }

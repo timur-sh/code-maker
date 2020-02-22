@@ -6,6 +6,7 @@ import net.shaidullin.code_maker.core.node.LeafNode;
 import net.shaidullin.code_maker.core.node.PackageNode;
 import net.shaidullin.code_maker.core.type.Type;
 import net.shaidullin.code_maker.core.type.TypeUtils;
+import net.shaidullin.code_maker.integration.impl.dto.DtoElementSettings;
 import net.shaidullin.code_maker.integration.impl.dto.generator.model.DtoJavaCacheModel;
 import net.shaidullin.code_maker.integration.impl.dto.metadata.DtoMetadata;
 import net.shaidullin.code_maker.integration.impl.dto.node.DtoNode;
@@ -13,6 +14,7 @@ import net.shaidullin.code_maker.ui.generator.AbstractGenerator;
 import net.shaidullin.code_maker.ui.resolver.NameResolverManager;
 import net.shaidullin.code_maker.utils.FileUtils;
 import net.shaidullin.code_maker.utils.PackageUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -73,6 +75,11 @@ public class DtoCacheJavaGenerator extends AbstractGenerator {
 
             String domainPackage = PackageUtils.assembleFqnClassName(dtoNode);
             importedPackages.add(domainPackage);
+
+            String cacheStorageInterface = state.getConfigurationValue(DtoElementSettings.CACHE_STORAGE_INTERFACE_KEY);
+            if (StringUtils.isNotBlank(cacheStorageInterface)) {
+                importedPackages.add(cacheStorageInterface);
+            }
 
             DtoJavaCacheModel cacheModel = new DtoJavaCacheModel();
             cacheModel.setKey(resolverManager.resolveJava(cacheType, false));

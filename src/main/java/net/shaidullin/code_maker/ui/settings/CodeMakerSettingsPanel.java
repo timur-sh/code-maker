@@ -16,6 +16,8 @@ import com.intellij.ui.table.JBTable;
 import com.intellij.util.ui.JBUI;
 import net.shaidullin.code_maker.core.config.ApplicationState;
 import net.shaidullin.code_maker.core.node.ModuleNode;
+import net.shaidullin.code_maker.integration.IntegrationElement;
+import net.shaidullin.code_maker.integration.IntegrationElementSettings;
 import net.shaidullin.code_maker.ui.validator.ModuleValidator;
 import net.shaidullin.code_maker.utils.FileUtils;
 import net.shaidullin.code_maker.utils.NodeUtils;
@@ -27,13 +29,15 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class CodeMakerSettingsPanel {
     private static final String DEFAULT_GENERATE_PATH = "generate_code";
 
-    private static final Insets COMPONENT_INSETS = JBUI.insets(4);
-    private static final Dimension DECORATOR_DIMENSIONS = new Dimension(300, 50);
+    public static final Insets COMPONENT_INSETS = JBUI.insets(4);
+    public static final Dimension DECORATOR_DIMENSIONS = new Dimension(300, 50);
 
     private final Project project;
     private final ApplicationState state;
@@ -41,6 +45,8 @@ public class CodeMakerSettingsPanel {
     private TextFieldWithBrowseButton generatePath;
     private SettingsTableModel cmTableModel;
     private JBTable moduleTable;
+
+    private List<IntegrationElementSettings> integrationElementSettings = new ArrayList<>();
 
     public CodeMakerSettingsPanel(Project project, ApplicationState state) {
         this.project = project;
@@ -74,8 +80,12 @@ public class CodeMakerSettingsPanel {
         commonPanel.add(generatePath,
             new GridBagConstraints(1, 1, 3, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, COMPONENT_INSETS, 0, 0));
 
-        commonPanel.add(buildClassPathPanel(),
+        commonPanel.add(buildModuleManagerPanel(),
             new GridBagConstraints(0, 2, 4, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, COMPONENT_INSETS, 0, 0));
+
+        commonPanel.add(buildIntegrationElementPanel(),
+            new GridBagConstraints(0, 3, 4, 1, 1.0, 1.0, GridBagConstraints.WEST, GridBagConstraints.BOTH, COMPONENT_INSETS, 0, 0));
+
         wholePanel.add(commonPanel, BorderLayout.CENTER);
 
         return wholePanel;
@@ -94,7 +104,7 @@ public class CodeMakerSettingsPanel {
         textField.setText(defaultShellPath);
     }
 
-    private JPanel buildClassPathPanel() {
+    private JPanel buildModuleManagerPanel() {
         cmTableModel = new SettingsTableModel(state);
         moduleTable = new JBTable(cmTableModel);
 
@@ -115,14 +125,45 @@ public class CodeMakerSettingsPanel {
         return modulePanel;
     }
 
+    private JPanel buildIntegrationElementPanel() {
+        integrationElementSettings.clear();
+
+        int girdy = 0;
+
+        JPanel elementContainerPanel = new JPanel(new GridBagLayout());
+        elementContainerPanel.add(new TitledSeparator("Integration Elements:"),
+            new GridBagConstraints(0, girdy, 4, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, COMPONENT_INSETS, 0, 0));
+
+        for (IntegrationElement<?> integrationElement : state.getIntegrationElements()) {
+            IntegrationElementSettings elementSettings = integrationElement.createSettingsPanel(state);
+            integrationElementSettings.add(elementSettings);
+
+            JPanel elementPanel = elementSettings.createPanel();
+
+            if (elementPanel != null) {
+                girdy++;
+
+                elementContainerPanel.add(elementPanel,
+                    new GridBagConstraints(0, girdy, 4, 1, 1.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL, COMPONENT_INSETS, 0, 0));
+            }
+        }
+
+        return elementContainerPanel;
+    }
+
     public boolean isModified() {
         return !Objects.equals(generatePath.getText(), state.getGeneratePath())
-            || cmTableModel.isModified(state);
+            || cmTableModel.isModified(state)
+            || integrationElementSettings.stream().anyMatch(IntegrationElementSettings::isModified);
     }
 
     public void apply() {
         state.setGeneratePath(generatePath.getText());
         cmTableModel.apply(state);
+
+        for (IntegrationElementSettings integrationElementSetting : integrationElementSettings) {
+            integrationElementSetting.apply();
+        }
 
         state.refreshState();
     }
@@ -130,6 +171,10 @@ public class CodeMakerSettingsPanel {
     public void reset() {
         setupTextFieldDefaultValue(generatePath.getTextField());
         cmTableModel.reset(state);
+
+        for (IntegrationElementSettings integrationElementSetting : integrationElementSettings) {
+            integrationElementSetting.reset();
+        }
 
         state.refreshState();
     }

@@ -1,15 +1,14 @@
 package net.shaidullin.code_maker.integration.impl.dto.generator.impl;
 
 import net.shaidullin.code_maker.core.config.ApplicationState;
-import net.shaidullin.code_maker.core.node.ElementNode;
 import net.shaidullin.code_maker.core.node.LeafNode;
 import net.shaidullin.code_maker.core.node.PackageNode;
 import net.shaidullin.code_maker.core.node.utils.LeafNodeUtils;
 import net.shaidullin.code_maker.core.type.TypeUtils;
+import net.shaidullin.code_maker.integration.impl.dto.DtoElementSettings;
 import net.shaidullin.code_maker.integration.impl.dto.generator.model.DtoFieldJavaModel;
 import net.shaidullin.code_maker.integration.impl.dto.generator.model.DtoJavaModel;
 import net.shaidullin.code_maker.integration.impl.dto.metadata.DtoMetadata;
-import net.shaidullin.code_maker.integration.impl.dto.node.DtoElementMetadata;
 import net.shaidullin.code_maker.integration.impl.dto.node.DtoNode;
 import net.shaidullin.code_maker.integration.impl.utils.DtoUtils;
 import net.shaidullin.code_maker.ui.generator.AbstractGenerator;
@@ -44,11 +43,8 @@ public class DtoJavaGenerator extends AbstractGenerator {
     public DtoJavaGenerator generate() {
         String leafPackage = PackageUtils.assembleFqnClassName(packageNode);
 
-        ElementNode elementNode = packageNode.getParent();
-        DtoElementMetadata elementMetadata = (DtoElementMetadata) elementNode.getMetadata();
-
-        String domainInterface = elementMetadata.getRootDtoJavaInterface();
-        String cacheInterface = elementMetadata.getCacheInterface();
+        String domainInterface = state.getConfigurationValue(DtoElementSettings.DTO_PARENT_INTERFACE_KEY);
+        String cacheInterface = state.getConfigurationValue(DtoElementSettings.DTO_CACHE_INTERFACE_KEY);
 
         List<LeafNode> leafNodes = state.getLeaves().get(packageNode);
 

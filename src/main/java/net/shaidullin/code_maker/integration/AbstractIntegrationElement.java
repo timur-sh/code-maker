@@ -78,4 +78,9 @@ public abstract class AbstractIntegrationElement<N extends LeafNode> implements 
 
         return true;
     }
+
+    @Override
+    public IntegrationElementSettings createSettingsPanel(ApplicationState state) {
+        return new DummyElementSettings();
+    }
 }
