@@ -1,7 +1,6 @@
 package net.shaidullin.code_maker.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.intellij.openapi.ui.Messages;
 import net.shaidullin.code_maker.core.metadata.*;
 import net.shaidullin.code_maker.core.node.*;
 import org.jetbrains.annotations.Nullable;

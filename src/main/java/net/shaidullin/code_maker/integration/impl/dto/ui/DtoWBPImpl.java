@@ -6,6 +6,7 @@ import com.intellij.openapi.ui.Messages;
 import com.intellij.ui.components.JBCheckBox;
 import com.intellij.ui.components.JBLabel;
 import net.shaidullin.code_maker.core.config.ApplicationState;
+import net.shaidullin.code_maker.core.node.LeafNode;
 import net.shaidullin.code_maker.core.type.Type;
 import net.shaidullin.code_maker.integration.impl.dto.metadata.DtoMetadata;
 import net.shaidullin.code_maker.integration.impl.dto.node.DtoNode;
@@ -110,6 +111,19 @@ public class DtoWBPImpl extends LeafWBPImpl<DtoNode> {
             UUID parentUID = StringUtils.isNotEmpty(parentData.getSecond())
                 ? UUID.fromString(parentData.getSecond())
                 : null;
+
+            LeafNode leafNode = state.getLeafByUID(parentUID);
+            if (leafNode instanceof DtoNode) {
+                DtoMetadata parentMetadata = ((DtoNode) leafNode).getMetadata();
+                metadata.setGeneric(parentMetadata.isGeneric());
+                metadata.setTypeArgumentUID(parentMetadata.getTypeArgumentUID());
+                metadata.setTypeParameter(parentMetadata.getTypeParameter());
+
+            } else {
+                metadata.setGeneric(false);
+                metadata.setTypeArgumentUID(null);
+                metadata.setTypeParameter(null);
+            }
 
             metadata.setParentUID(parentUID);
         }

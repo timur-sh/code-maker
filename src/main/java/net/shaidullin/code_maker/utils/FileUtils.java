@@ -2,6 +2,7 @@ package net.shaidullin.code_maker.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import net.shaidullin.code_maker.core.config.ApplicationState;
+import net.shaidullin.code_maker.core.metadata.ModuleMetadata;
 import net.shaidullin.code_maker.core.node.*;
 import org.apache.commons.lang3.StringUtils;
 
@@ -16,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class FileUtils {
+    public static final String TYPE_SCRIPT_EXTENSION = "ts";
     public static final String JAVA_EXTENSION = "java";
     public static final String LEAF_METADATA_EXTENSION = "json";
     public static final String SEPARATOR = File.separator;
@@ -141,6 +143,16 @@ public class FileUtils {
         return file.getPath();
     }
 
+    public static String buildPathToGeneratedData(ApplicationState state, ModuleNode node, String path) {
+        List<String> parts = new ArrayList<>();
+        parts.add(state.getGeneratePath());
+        parts.add(node.getSystemName());
+        parts.add(path);
+
+        File file = new File(StringUtils.join(parts, SEPARATOR));
+        return file.getPath();
+    }
+
     public static String buildPathToGeneratedData(ApplicationState state, Node node) {
         return buildPathToGeneratedData(state, node, false);
     }
@@ -168,6 +180,11 @@ public class FileUtils {
         }
 
         if (node instanceof ModuleNode) {
+            ModuleMetadata moduleMetadata = ((ModuleMetadata) node.getMetadata());
+
+            parts.addAll(
+                Arrays.asList(moduleMetadata.getFqnPackage().split("\\."))
+            );
             parts.add(node.getSystemName());
         }
 

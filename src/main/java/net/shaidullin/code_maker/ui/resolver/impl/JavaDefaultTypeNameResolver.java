@@ -8,7 +8,7 @@ import net.shaidullin.code_maker.utils.PackageUtils;
 
 import java.util.Map;
 
-public class DefaultTypeJavaNameResolver implements NameResolver {
+public class JavaDefaultTypeNameResolver implements NameResolver {
     @Override
     public String resolve(Object element) {
         return resolve(element, true);

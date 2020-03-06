@@ -14,10 +14,7 @@ import net.shaidullin.code_maker.integration.IntegrationElement;
 import net.shaidullin.code_maker.integration.IntegrationElementRegistry;
 import net.shaidullin.code_maker.integration.impl.dto.DtoIntegrationElement;
 import net.shaidullin.code_maker.ui.resolver.NameResolverManager;
-import net.shaidullin.code_maker.ui.resolver.impl.DefaultTypeJavaNameResolver;
-import net.shaidullin.code_maker.ui.resolver.impl.FieldJavaNameResolver;
-import net.shaidullin.code_maker.ui.resolver.impl.FieldPluginUiNameResolver;
-import net.shaidullin.code_maker.ui.resolver.impl.MetadataTypeJavaNameResolver;
+import net.shaidullin.code_maker.ui.resolver.impl.*;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -50,10 +47,16 @@ public class ApplicationState implements PersistentStateComponent<CMState> {
         typeManager = TypeManager.getInstance();
 
         NameResolverManager.getInstance()
-            .register(new DefaultTypeJavaNameResolver())
-            .register(new MetadataTypeJavaNameResolver())
-            .register(new FieldJavaNameResolver())
-            .register(new FieldPluginUiNameResolver());
+            .register(new JavaDefaultTypeNameResolver())
+            .register(new JavaMetadataTypeNameResolver())
+            .register(new JavaFieldNameResolver())
+
+            .register(new TypeScriptDefaultTypeNameResolver())
+            .register(new TypeScriptMetadataTypeNameResolver())
+            .register(new TypeScriptFieldNameResolver())
+
+            .register(new FieldPluginUiNameResolver())
+        ;
     }
 
     @NotNull

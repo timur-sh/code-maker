@@ -1,11 +1,11 @@
-package net.shaidullin.code_maker.integration.impl.dto.ui;
+package net.shaidullin.code_maker.integration.impl.dto.ui.resolver;
 
 import net.shaidullin.code_maker.integration.impl.dto.metadata.DtoMetadata;
 import net.shaidullin.code_maker.ui.resolver.NameResolver;
 import net.shaidullin.code_maker.ui.resolver.NameResolverManager;
 import org.apache.commons.lang3.StringUtils;
 
-public class DtoJavaNameResolver implements NameResolver {
+public class JavaDtoNameResolver implements NameResolver {
     @Override
     public String resolve(Object element) {
         return resolve(element, true);

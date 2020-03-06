@@ -10,7 +10,7 @@ import net.shaidullin.code_maker.integration.impl.dto.generator.model.DtoFieldJa
 import net.shaidullin.code_maker.integration.impl.dto.generator.model.DtoJavaModel;
 import net.shaidullin.code_maker.integration.impl.dto.metadata.DtoMetadata;
 import net.shaidullin.code_maker.integration.impl.dto.node.DtoNode;
-import net.shaidullin.code_maker.integration.impl.utils.DtoUtils;
+import net.shaidullin.code_maker.integration.utils.DtoUtils;
 import net.shaidullin.code_maker.ui.generator.AbstractGenerator;
 import net.shaidullin.code_maker.ui.resolver.NameResolverManager;
 import net.shaidullin.code_maker.utils.FileUtils;
@@ -63,7 +63,7 @@ public class DtoJavaGenerator extends AbstractGenerator {
                 if (!parentClassNode.equals(LeafNodeUtils.UNDEFINED_CLASS)) {
                     String parentPackageName = PackageUtils.assembleFqnClassName(parentClassNode);
                     importedPackages.add(parentPackageName);
-                    model.setParent(parentClassNode.getMetadata().getSystemName());
+                    model.setParent(resolverManager.resolveJava(parentClassNode.getMetadata(), false));
                 }
 
             } else if (StringUtils.isNoneEmpty(domainInterface) && !metadata.isCachable()) {

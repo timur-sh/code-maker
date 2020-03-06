@@ -6,7 +6,7 @@ import net.shaidullin.code_maker.core.type.TypeManager;
 import net.shaidullin.code_maker.ui.resolver.NameResolver;
 import net.shaidullin.code_maker.ui.resolver.NameResolverManager;
 
-public class FieldJavaNameResolver implements NameResolver {
+public class JavaFieldNameResolver implements NameResolver {
 
     @Override
     public String resolve(Object element) {
@@ -47,7 +47,7 @@ public class FieldJavaNameResolver implements NameResolver {
         throw new UnsupportedOperationException("FieldPluginUiNameResolver#resolve(element, forPrimitive, typeArgument)");
     }
 
-    private String getGenericOrDefaultName(FieldMetadata metadata, Type type, boolean forPrimitive) {
+    protected String getGenericOrDefaultName(FieldMetadata metadata, Type type, boolean forPrimitive) {
         // for generic metadata build generic name
         if (metadata.isGeneric()) {
             return metadata.getTypeParameter();
@@ -58,14 +58,14 @@ public class FieldJavaNameResolver implements NameResolver {
                 .getTypeByUID(metadata.getTypeArgumentUID());
 
             String typeArgumentName = NameResolverManager.getInstance()
-                .resolveJava(typeArgument, false);
+                .resolve(getSupportLanguage(), typeArgument, false);
 
             return NameResolverManager.getInstance()
-                .resolve(NameResolverManager.JAVA, type, false, typeArgumentName);
+                .resolve(getSupportLanguage(), type, false, typeArgumentName);
         }
 
         return NameResolverManager.getInstance()
-            .resolveJava(type, forPrimitive);
+            .resolve(getSupportLanguage(), type, forPrimitive);
     }
 
 

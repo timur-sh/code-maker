@@ -9,6 +9,7 @@ import java.util.Map;
  * Name resolvers are initialized in {@link ApplicationState#initialize()}
  */
 public class NameResolverManager {
+    public static final String TYPE_SCRIPT = "ts";
     public static final String JAVA = "java";
     public static final String PLUGIN_UI = "plugin-ui";
 
@@ -31,6 +32,10 @@ public class NameResolverManager {
         resolvers.put(key, nameResolver);
 
         return this;
+    }
+
+    public String resolveTypeScript(Object element, boolean forPrimitive) {
+        return this.resolve(TYPE_SCRIPT, element, forPrimitive);
     }
 
     public String resolveJava(Object element, boolean forPrimitive) {

@@ -4,7 +4,7 @@ import net.shaidullin.code_maker.core.type.MetadataType;
 import net.shaidullin.code_maker.ui.resolver.NameResolver;
 import net.shaidullin.code_maker.ui.resolver.NameResolverManager;
 
-public class MetadataTypeJavaNameResolver implements NameResolver {
+public class JavaMetadataTypeNameResolver implements NameResolver {
     @Override
     public String resolve(Object element) {
         return resolve(element, true);

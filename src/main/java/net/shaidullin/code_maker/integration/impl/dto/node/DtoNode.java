@@ -4,10 +4,11 @@ import net.shaidullin.code_maker.core.node.FieldNode;
 import net.shaidullin.code_maker.core.node.LeafNode;
 import net.shaidullin.code_maker.core.node.Node;
 import net.shaidullin.code_maker.core.node.PackageNode;
+import net.shaidullin.code_maker.core.type.TypeManager;
 import net.shaidullin.code_maker.integration.IntegrationElement;
 import net.shaidullin.code_maker.integration.impl.dto.metadata.DtoMetadata;
-import net.shaidullin.code_maker.integration.impl.dto.ui.DtoJavaNameResolver;
 import net.shaidullin.code_maker.ui.resolver.NameResolverManager;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;

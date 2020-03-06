@@ -14,13 +14,13 @@ import net.shaidullin.code_maker.integration.IntegrationElement;
 import net.shaidullin.code_maker.integration.IntegrationElementSettings;
 import net.shaidullin.code_maker.integration.impl.dto.generator.impl.DtoCacheJavaGenerator;
 import net.shaidullin.code_maker.integration.impl.dto.generator.impl.DtoJavaGenerator;
+import net.shaidullin.code_maker.integration.impl.dto.generator.impl.DtoTypeScriptGenerator;
 import net.shaidullin.code_maker.integration.impl.dto.metadata.DtoMetadata;
 import net.shaidullin.code_maker.integration.impl.dto.node.DtoElementMetadata;
 import net.shaidullin.code_maker.integration.impl.dto.node.DtoNode;
-import net.shaidullin.code_maker.integration.impl.dto.ui.DtoFieldWBPImpl;
-import net.shaidullin.code_maker.integration.impl.dto.ui.DtoJavaNameResolver;
-import net.shaidullin.code_maker.integration.impl.dto.ui.DtoNodeTreeMenuImpl;
-import net.shaidullin.code_maker.integration.impl.dto.ui.DtoWBPImpl;
+import net.shaidullin.code_maker.integration.impl.dto.ui.*;
+import net.shaidullin.code_maker.integration.impl.dto.ui.resolver.JavaDtoNameResolver;
+import net.shaidullin.code_maker.integration.impl.dto.ui.resolver.TypeScriptDtoNameResolver;
 import net.shaidullin.code_maker.ui.resolver.NameResolverManager;
 import net.shaidullin.code_maker.ui.toolwindow.tree.NodeTreeMenu;
 import net.shaidullin.code_maker.ui.toolwindow.workspace.impl.WorkspacePanelBody;
@@ -67,6 +67,10 @@ public class DtoIntegrationElement extends AbstractIntegrationElement<DtoNode> {
             .generate()
             .save();
 
+        new DtoTypeScriptGenerator(packageNode, state)
+            .generate()
+            .save();
+
         new DtoCacheJavaGenerator(packageNode, state)
             .generate()
             .save();
@@ -78,7 +82,8 @@ public class DtoIntegrationElement extends AbstractIntegrationElement<DtoNode> {
     public void initialize(ModuleNode moduleNode, NameResolverManager resolverManager) {
         super.initialize(moduleNode, resolverManager);
 
-        resolverManager.register(new DtoJavaNameResolver());
+        resolverManager.register(new JavaDtoNameResolver());
+        resolverManager.register(new TypeScriptDtoNameResolver());
     }
 
     @Override
